@@ -11,17 +11,25 @@ import com.example.warehouse.models.Works
 import com.example.warehouse.service.Constants
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 
-class MainPageViewModel: ViewModel() {
-    companion object{
+class MainPageViewModel: MainViewModel() {
+/*    companion object{
         fun  create () : MainPageViewModel {
             return MainPageViewModel()
         }
-    }
-    var worksList by mutableStateOf<List<Works>>(listOf())
+    }*/
+    //var worksList by mutableStateOf<List<Works>>(listOf())
+    private val _worksList = MutableStateFlow<List<Works>>(emptyList())
+    val worksList: StateFlow<List<Works>> = _worksList
 
-    @Composable
+    fun updateWorksList(newList: List<Works>) {
+        _worksList.value = newList
+    }
+
+/*    @Composable
     fun getWorks():List<Works> {
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
@@ -37,7 +45,7 @@ class MainPageViewModel: ViewModel() {
             }
         }
         return worksList
-    }
+    }*/
 
 
 }

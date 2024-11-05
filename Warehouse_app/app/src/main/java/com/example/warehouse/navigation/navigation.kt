@@ -25,7 +25,7 @@ fun Navigation(viewModel: MainViewModel) {
             Registration(navController, AvtorizationVM)
         }
         composable("MainPage"){
-            MainPage(navController, MainPageViewModel)
+            MainPage(navController, MainPageViewModel()) //!!!!!!!!!!!!!!!!!!!!!!!! разобраться с тем что я ничего не получаю из вью модели моей первой страницы
         }
     }
 }
