@@ -62,7 +62,7 @@ import com.example.warehouse.view_models.AvtorizationVM
 //navHost: NavHostController, viewModel: AvtorizationVM.Companion
 //@Preview
 @Composable
-fun Registration(navHost: NavHostController, viewModel: AvtorizationVM.Companion) {
+fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }

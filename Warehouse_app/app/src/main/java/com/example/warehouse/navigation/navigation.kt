@@ -15,17 +15,18 @@ import com.example.warehouse.view_models.MainViewModel
 @Composable
 fun Navigation(viewModel: MainViewModel) {
     val navController = rememberNavController()
-    NavHost(navController = navController,//контроллер реагирующий и отвечающий за перемещения
+    NavHost(navController = navController,
         startDestination = "MainPage")
     {
         composable("Avtorization"){
-            Avtorization(navController, AvtorizationVM)
+            Avtorization(navController, AvtorizationVM())
         }
         composable("Registration"){
-            Registration(navController, AvtorizationVM)
+            Registration(navController, AvtorizationVM())
         }
         composable("MainPage"){
-            MainPage(navController, MainPageViewModel()) //!!!!!!!!!!!!!!!!!!!!!!!! разобраться с тем что я ничего не получаю из вью модели моей первой страницы
+            MainPage(navController, MainPageViewModel())
+            //MainPage()
         }
     }
 }

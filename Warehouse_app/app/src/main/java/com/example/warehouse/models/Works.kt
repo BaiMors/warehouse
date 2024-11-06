@@ -13,5 +13,6 @@ data class Works(
     val status: String,
     val num_chapters: Int,
     val date: String,
-    val likes: Int
+    val likes: Int,
+    var author1: Users? = null
 )

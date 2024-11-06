@@ -5,11 +5,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class AvtorizationVM:ViewModel(){
-    companion object{
-        fun  create () : AvtorizationVM {
-            return AvtorizationVM()
-        }
-    }
 
     sealed class Result {
         data class Success(val user: Any) : Result()  // Успех

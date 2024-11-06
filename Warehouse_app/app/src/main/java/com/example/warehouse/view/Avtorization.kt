@@ -44,7 +44,7 @@ import androidx.navigation.NavHostController
 //navHost: NavHostController, viewModel: AvtorizationVM.Companion
 //@Preview
 @Composable
-fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM.Companion) {
+fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     // val authResult by viewModel.create().authResult.collectAsState()
