@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.compiler) //плагин для версии котлин 2.ч и более или типа того
 
     kotlin("plugin.serialization") version "2.0.20"
 }
@@ -54,14 +54,16 @@ android {
 
 dependencies {
 
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.0.0"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:realtime-kt")
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.0.0")) //основа супабейз???
+    implementation("io.github.jan-tennert.supabase:postgrest-kt") //для поддержки постгри
+    implementation("io.github.jan-tennert.supabase:auth-kt") //для встр авторизации супабейз
+    implementation("io.github.jan-tennert.supabase:realtime-kt") //для рилтайма в таблицах супабейз
 
-    implementation("io.ktor:ktor-client-android:3.0.0")
+    implementation("io.ktor:ktor-client-android:3.0.0") //для подключения
 
-    implementation(libs.androidx.ui.text.google.fonts)
+    implementation("io.coil-kt:coil-compose:2.2.2")//для отрисовки картинок
+
+    implementation(libs.androidx.ui.text.google.fonts) //для гугл шрифтов
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

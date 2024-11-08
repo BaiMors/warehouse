@@ -2,15 +2,18 @@ package com.example.warehouse.view
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -35,6 +38,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.example.warehouse.R
 import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
@@ -61,7 +68,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
             fontSize = 22.sp,
             color = LightBrown,
             textAlign = TextAlign.Left,
-            modifier = Modifier.padding(start = 21.dp, top = 13.dp, bottom = 25.dp,)
+            modifier = Modifier.padding(start = 21.dp, top = 33.dp, bottom = 25.dp,)
         )
         Box(
             modifier = Modifier
@@ -69,7 +76,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                 .padding(start = 21.dp)
                 .height(1.dp)
                 .width(329.dp)
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.CenterHorizontally),
         )
         Row(
             modifier = Modifier
@@ -92,7 +99,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     tint = Brown,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(end = 21.dp)
+                        .padding(end = 21.dp, bottom = 25.dp)
                 )
             }
         }
@@ -103,16 +110,16 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                         modifier = Modifier
                             .background(LightGreen, shape = RoundedCornerShape(5.dp))
                             //.width(370.dp)
-                            .padding(start = 21.dp, end = 21.dp)
+                            .border(15.dp, DarkGreen)
                             .align(Alignment.Center)
                     ) {
                         Row(
                             modifier = Modifier
                                 //.width(355.dp)
-                                .padding(start = 14.dp, end = 14.dp)
+                                .padding(start = 14.dp, end = 14.dp, top = 10.dp)
                         ) {
                             Box(modifier = Modifier.fillMaxWidth()) {
-                                Box(modifier = Modifier.width(280.dp)) {
+                                Box(modifier = Modifier.width(270.dp)) {
                                     Text(
                                         text = work.name,
                                         fontSize = 19.sp,
@@ -139,11 +146,153 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                         Row(
                             modifier = Modifier
                                 .height(260.dp)
-                                .width(345.dp)
+                                //.width(345.dp)
+                                .fillMaxWidth()
+                                //.border(50.dp, LightGreen)
+                                .padding(start = 20.dp, end = 20.dp, top = 15.dp)
                                 .background(DarkGreen)
                                 .align(Alignment.CenterHorizontally)
                         ) {
+                            /*val imageState = rememberAsyncImagePainter(
+                                model = ImageRequest.Builder(LocalContext.current).data(work.)
+                                    .size(Size.ORIGINAL).build()
+                            ).state
+                            if (imageState is AsyncImagePainter.State.Error) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                            if (imageState is AsyncImagePainter.State.Success) {
+                                Image(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp),
+                                    painter = imageState.painter,
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
+                                        .background(Color.Black.copy(alpha = 0.5f))
+                                )
+                            }*/
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = 10.dp, top = 20.dp)
+                                    .background(Color.Black)
+                                    .border(1.dp, Brown)
+                            ) {
 
+                            }
+                            Column(
+                                modifier = Modifier.padding(end = 13.dp)
+                            ) {
+                                Row {
+                                    //Box {
+                                        Icon(
+                                            painter = painterResource(R.drawable.fandom),
+                                            contentDescription = "",
+                                            tint = Brown,
+                                            modifier = Modifier
+                                                //.align(Alignment.CenterStart)
+                                        )
+                                    //}
+                                    Text(
+                                        text = "тут будут фандомы"
+                                    )
+                                }
+                                Row {
+                                    //Box {
+                                    Icon(
+                                        painter = painterResource(R.drawable.author),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
+                                    )
+                                    //}
+                                    Text(
+                                        text = "тут будет автор"
+                                    )
+                                }
+                                Row {
+                                    //Box {
+                                    Icon(
+                                        painter = painterResource(R.drawable.genre),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
+                                    )
+                                    //}
+                                    Text(
+                                        text = "тут будут тэги"
+                                    )
+                                }
+                                Row {
+                                    //Box {
+                                    Icon(
+                                        painter = painterResource(R.drawable.status),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
+                                    )
+                                    //}
+                                    Text(
+                                        text = work.status
+                                    )
+                                }
+                                Row {
+                                    //Box {
+                                    Icon(
+                                        painter = painterResource(R.drawable.date),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
+                                    )
+                                    //}
+                                    Text(
+                                        text = work.date
+                                    )
+                                }
+                                Row {
+                                    //Box {
+                                    Icon(
+                                        painter = painterResource(R.drawable.chapters),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
+                                    )
+                                    //}
+                                    Text(
+                                        text = work.num_chapters.toString() + " глав"
+                                    )
+                                }
+                                Row {
+                                    //Box {
+                                    Icon(
+                                        painter = painterResource(R.drawable.likes),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
+                                    )
+                                    //}
+                                    Text(
+                                        text = work.likes.toString()
+                                    )
+                                }
+                            }
                         }
                         Box {
                             Text(
@@ -154,14 +303,19 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                 lineHeight = 20.sp,
                                 textAlign = TextAlign.Left,
                                 modifier = Modifier
-                                    .padding(start = 14.dp, top = 17.dp, bottom = 7.dp, end = 14.dp)
+                                    .padding(
+                                        start = 24.dp,
+                                        top = 17.dp,
+                                        bottom = 22.dp,
+                                        end = 24.dp
+                                    )
                                     .align(Alignment.CenterStart)
                             )
                         }
-                        Box(
+                        Spacer(
                             modifier = Modifier
                                 .background(DarkGreen)
-                                .padding(end = 12.dp)
+                                .padding(end = 7.dp)
                                 .height(1.dp)
                                 .width(329.dp)
                                 .align(Alignment.CenterHorizontally)
@@ -169,32 +323,36 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     }
                 }
             }
-            /*        Text(
+
+
+            /*Text(
             text = "Добро пожаловать на Склад",
             fontSize = 22.sp,
             color = LightBrown,
             textAlign = TextAlign.Left,
-            modifier = Modifier.padding(start = 21.dp, top = 13.dp, bottom = 25.dp,)
+            modifier = Modifier.padding(start = 21.dp, top = 33.dp, bottom = 25.dp)
         )
-        Box(modifier = Modifier
-            .background(Brown)
-            .padding(start = 21.dp)
-            .height(1.dp)
-            .width(329.dp)
-            .align(Alignment.CenterHorizontally))
+        Box(
+            modifier = Modifier
+                .background(Brown)
+                .padding(start = 21.dp)
+                .height(1.dp)
+                .width(329.dp)
+                .align(Alignment.CenterHorizontally)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(65.dp)
         ) {
-            Box(modifier = Modifier.fillMaxWidth()){
+            Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "Вот что популярно сегодня",
                     fontSize = 20.sp,
                     color = LightBrown,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
-                        .padding(start = 21.dp, top = 17.dp, bottom = 25.dp,)
+                        .padding(start = 21.dp, top = 17.dp, bottom = 25.dp)
                         .align(Alignment.CenterStart)
                 )
                 Icon(
@@ -214,9 +372,11 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                 .width(355.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Row(modifier = Modifier
-                .width(355.dp)) {
-                Box(modifier = Modifier.fillMaxWidth()){
+            Row(
+                modifier = Modifier
+                    .width(355.dp)
+            ) {
+                Box(modifier = Modifier.fillMaxWidth()) {
                     Box(modifier = Modifier.width(280.dp)) {
                         Text(
                             text = "Название работы должно быть привязано и помещено здесь",
@@ -265,10 +425,11 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
             }
         }*/
         }
-        /*    LazyColumn {
-        items(worksList) { work ->
-            work.author1?.let { Text(text = it.name, color = Color.Black) }
-        }
-    }*/
     }
 }
+
+/*LazyColumn {
+    items(worksList) { work ->
+        work.author1?.let { Text(text = it.name, color = Color.Black) }
+    }
+}*/

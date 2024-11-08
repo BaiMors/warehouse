@@ -14,5 +14,8 @@ data class Works(
     val num_chapters: Int,
     val date: String,
     val likes: Int,
-    var author1: Users? = null
+
+    var author1: Users? = null,
+    var fandoms: List<Work_fandoms>? = null,
+    var tags: List<Work_tags>? = null
 )
