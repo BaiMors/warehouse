@@ -1,6 +1,7 @@
 package com.example.warehouse.view
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
@@ -29,26 +31,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment.Companion.Rectangle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.warehouse.R
+import com.example.warehouse.models.Gallery
+import com.example.warehouse.service.Constants
 import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.ui.theme.LightGreen
 import com.example.warehouse.view_models.AvtorizationVM
 import com.example.warehouse.view_models.MainPageViewModel
+import kotlinx.datetime.LocalDate
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 //@Preview()
 @Composable
@@ -68,7 +79,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
             fontSize = 22.sp,
             color = LightBrown,
             textAlign = TextAlign.Left,
-            modifier = Modifier.padding(start = 21.dp, top = 33.dp, bottom = 25.dp,)
+            modifier = Modifier.padding(start = 21.dp, top = 33.dp, bottom = 25.dp)
         )
         Box(
             modifier = Modifier
@@ -90,7 +101,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     color = LightBrown,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
-                        .padding(start = 21.dp, top = 17.dp, bottom = 25.dp,)
+                        .padding(start = 21.dp, top = 17.dp, bottom = 25.dp)
                         .align(Alignment.CenterStart)
                 )
                 Icon(
@@ -153,36 +164,65 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                 .background(DarkGreen)
                                 .align(Alignment.CenterHorizontally)
                         ) {
-                            /*val imageState = rememberAsyncImagePainter(
-                                model = ImageRequest.Builder(LocalContext.current).data(work.)
-                                    .size(Size.ORIGINAL).build()
-                            ).state
-                            if (imageState is AsyncImagePainter.State.Error) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator()
+                            val galleryList: List<Gallery> = work.gallery ?: emptyList()
+                            LazyRow {
+                                items(galleryList) { image ->
+                                    //Text(text = image.image)
+                                    if (!image.image.contains("Warehouse"))
+                                    {
+                                        /*val imageState = rememberAsyncImagePainter(
+                                            model = ImageRequest.Builder(LocalContext.current)
+                                                .data(image.image)
+                                                .size(Size.ORIGINAL).build()
+                                        ).state
+                                        if (imageState is AsyncImagePainter.State.Error) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(200.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                CircularProgressIndicator()
+                                            }
+                                        }
+                                        if (imageState is AsyncImagePainter.State.Success) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(200.dp)
+                                                    .border(1.dp, Brown),
+                                                painter = imageState.painter,
+                                                contentDescription = "",
+                                                contentScale = ContentScale.Crop,
+                                            )
+                                        }*/
+                                        AsyncImage(
+                                            model = image.image,
+                                            contentDescription = "",
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(200.dp)
+                                                .width(150.dp)
+                                                .border(1.dp, Brown),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    }
+                                    else
+                                    {
+                                        AsyncImage(
+                                            model = image.image,
+                                            contentDescription = "",
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(200.dp)
+                                                .width(150.dp)
+                                                .border(1.dp, Brown),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    }
                                 }
                             }
-                            if (imageState is AsyncImagePainter.State.Success) {
-                                Image(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp),
-                                    painter = imageState.painter,
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop,
-                                )
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp)
-                                        .background(Color.Black.copy(alpha = 0.5f))
-                                )
-                            }*/
+
                             Box(
                                 modifier = Modifier
                                     .padding(start = 10.dp, top = 20.dp)
@@ -196,17 +236,19 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                             ) {
                                 Row {
                                     //Box {
-                                        Icon(
-                                            painter = painterResource(R.drawable.fandom),
-                                            contentDescription = "",
-                                            tint = Brown,
-                                            modifier = Modifier
-                                                //.align(Alignment.CenterStart)
-                                        )
-                                    //}
-                                    Text(
-                                        text = "тут будут фандомы"
+                                    Icon(
+                                        painter = painterResource(R.drawable.fandom),
+                                        contentDescription = "",
+                                        tint = Brown,
+                                        modifier = Modifier
+                                        //.align(Alignment.CenterStart)
                                     )
+                                    //}
+                                    work.fandoms?.map { it.fandom1?.name }?.let {
+                                        Text(
+                                            text = it.joinToString(", ")
+                                        )
+                                    }
                                 }
                                 Row {
                                     //Box {
@@ -218,9 +260,11 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                         //.align(Alignment.CenterStart)
                                     )
                                     //}
-                                    Text(
-                                        text = "тут будет автор"
-                                    )
+                                    work.author1?.let {
+                                        Text(
+                                            text = it.name
+                                        )
+                                    }
                                 }
                                 Row {
                                     //Box {
@@ -232,9 +276,11 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                         //.align(Alignment.CenterStart)
                                     )
                                     //}
-                                    Text(
-                                        text = "тут будут тэги"
-                                    )
+                                    work.tags?.map { it.tag1?.name }?.let {
+                                        Text(
+                                            text = it.joinToString(", ")
+                                        )
+                                    }
                                 }
                                 Row {
                                     //Box {
@@ -261,7 +307,9 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                     )
                                     //}
                                     Text(
-                                        text = work.date
+                                        text = work.date.removeRange(
+                                            10..work.date.length-1 // range
+                                        )
                                     )
                                 }
                                 Row {
@@ -275,7 +323,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                     )
                                     //}
                                     Text(
-                                        text = work.num_chapters.toString() + " глав"
+                                        text = work.num_chapters.toString() + " глав(а)"
                                     )
                                 }
                                 Row {
