@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouse.models.Fandoms
@@ -28,9 +29,18 @@ import kotlinx.coroutines.withContext
 
 class MainPageViewModel: MainViewModel() {
     //var text = "я пришел из mainpageviewmodel!"
+    val _popularWorks = _worksList
+    //var popularWorks: StateFlow<List<Works>> = _popularWorks
+    var popularWorks: StateFlow<List<Works>> = _popularWorks
 
+    private fun getPopularWorks(){
+        val buf = _worksList.value.sortedBy { it.likes }.take(5)
+        println("!!!!!!! ВЬЮ МОДЕЛЬ ")
+        _popularWorks.value = _popularWorks.value.sortedBy { it.likes }.take(5)
+    }
 
     init {
         loadWorks()
+        getPopularWorks()
     }
 }
