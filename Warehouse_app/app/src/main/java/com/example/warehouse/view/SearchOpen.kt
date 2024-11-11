@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -126,7 +127,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                             }
                             Row(
                                 modifier = Modifier
-                                    .height(260.dp)
+                                    //.height(260.dp)
                                     //.width(345.dp)
                                     .fillMaxWidth()
                                     //.border(50.dp, LightGreen)
@@ -212,7 +213,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             work.fandoms?.map { it.fandom1?.name }?.let {
                                                 Text(
-                                                    text = it.joinToString(", "), fontSize = 12.sp,
+                                                    text = it.joinToString(", "), fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -232,7 +233,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             work.author1?.let {
                                                 Text(
-                                                    text = it.name, fontSize = 12.sp,
+                                                    text = it.name, fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -242,6 +243,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                         }
 
                                     }
+                                    HorizontalDivider(thickness = 1.dp, color = Brown.copy(alpha = 0.5f), modifier = Modifier.padding(top = 5.dp, bottom = 7.dp))
                                     Row(modifier = Modifier.padding(bottom = 5.dp)) {
                                         Box {
                                             Icon(
@@ -253,7 +255,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             work.tags?.map { it.tag1?.name }?.let {
                                                 Text(
-                                                    text = it.joinToString(", "), fontSize = 12.sp,
+                                                    text = it.joinToString(", "), fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -263,6 +265,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                         }
 
                                     }
+                                    HorizontalDivider(thickness = 1.dp, color = Brown.copy(alpha = 0.5f), modifier = Modifier.padding(top = 5.dp, bottom = 7.dp))
                                     Row(modifier = Modifier.padding(bottom = 5.dp)) {
                                         Box {
                                             Icon(
@@ -273,7 +276,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                                 //.align(Alignment.CenterStart)
                                             )
                                             Text(
-                                                text = work.status, fontSize = 12.sp,
+                                                text = work.status, fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -294,7 +297,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             Text(
                                                 text = work.date.removeRange(
                                                     10..work.date.length - 1 // range
-                                                ), fontSize = 12.sp,
+                                                ), fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -314,7 +317,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             Text(
                                                 text = work.num_chapters.toString() + " глав(а)",
-                                                fontSize = 12.sp,
+                                                fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -333,7 +336,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                                 //.align(Alignment.CenterStart)
                                             )
                                             Text(
-                                                text = work.likes.toString(), fontSize = 12.sp,
+                                                text = work.likes.toString(), fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),

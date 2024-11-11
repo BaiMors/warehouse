@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.warehouse.view.Avtorization
 import com.example.warehouse.view.Catalogue
+import com.example.warehouse.view.CatalogueOpen
 import com.example.warehouse.view.MainPage
 import com.example.warehouse.view.Profile
 import com.example.warehouse.view.Registration
@@ -54,6 +55,17 @@ fun Navigation(viewModel: MainViewModel) {
         }
         composable("Catalogue"){
             Catalogue(navController, CatalogueVM())
+            //MainPage()
+        }
+        composable(
+            "CatalogueOpen/{category}",
+            arguments = listOf(
+                navArgument(name = "category"){
+                    type = NavType.StringType
+                }
+            )
+        ){backStackEntry ->
+            CatalogueOpen(navController, CatalogueVM(), backStackEntry.arguments?.getString("category"))
             //MainPage()
         }
         composable("Profile"){

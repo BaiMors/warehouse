@@ -84,7 +84,9 @@ fun Search(navHost: NavHostController, viewModel: SearchViewModel){
                         focusedContainerColor = LightGreen,
                         unfocusedContainerColor = LightGreen,
                         focusedPlaceholderColor = LightGreen,
-                        unfocusedPlaceholderColor = LightBrown
+                        unfocusedPlaceholderColor = LightBrown,
+                        focusedIndicatorColor = LightGreen,
+                        unfocusedIndicatorColor = LightGreen
                     ),
                     //123456789 123456789 123456789 1234567
                     trailingIcon = {

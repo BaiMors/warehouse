@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
@@ -171,7 +172,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                             }
                             Row(
                                 modifier = Modifier
-                                    .height(260.dp)
+                                    //.height(260.dp)
                                     //.width(345.dp)
                                     .fillMaxWidth()
                                     //.border(50.dp, LightGreen)
@@ -257,7 +258,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                             )
                                             work.fandoms?.map { it.fandom1?.name }?.let {
                                                 Text(
-                                                    text = it.joinToString(", "), fontSize = 12.sp,
+                                                    text = it.joinToString(", "), fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -277,7 +278,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                             )
                                             work.author1?.let {
                                                 Text(
-                                                    text = it.name, fontSize = 12.sp,
+                                                    text = it.name, fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -287,6 +288,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                         }
 
                                     }
+                                    HorizontalDivider(thickness = 1.dp, color = Brown.copy(alpha = 0.5f), modifier = Modifier.padding(top = 5.dp, bottom = 7.dp))
                                     Row(modifier = Modifier.padding(bottom = 5.dp)) {
                                         Box {
                                             Icon(
@@ -298,7 +300,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                             )
                                             work.tags?.map { it.tag1?.name }?.let {
                                                 Text(
-                                                    text = it.joinToString(", "), fontSize = 12.sp,
+                                                    text = it.joinToString(", "), fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -308,6 +310,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                         }
 
                                     }
+                                    HorizontalDivider(thickness = 1.dp, color = Brown.copy(alpha = 0.5f), modifier = Modifier.padding(top = 5.dp, bottom = 7.dp))
                                     Row(modifier = Modifier.padding(bottom = 5.dp)) {
                                         Box {
                                             Icon(
@@ -318,7 +321,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                                 //.align(Alignment.CenterStart)
                                             )
                                             Text(
-                                                text = work.status, fontSize = 12.sp,
+                                                text = work.status, fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -339,7 +342,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                             Text(
                                                 text = work.date.removeRange(
                                                     10..work.date.length - 1 // range
-                                                ), fontSize = 12.sp,
+                                                ), fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -359,7 +362,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                             )
                                             Text(
                                                 text = work.num_chapters.toString() + " глав(а)",
-                                                fontSize = 12.sp,
+                                                fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -378,7 +381,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                                 //.align(Alignment.CenterStart)
                                             )
                                             Text(
-                                                text = work.likes.toString(), fontSize = 12.sp,
+                                                text = work.likes.toString(), fontSize = 12.sp, color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
