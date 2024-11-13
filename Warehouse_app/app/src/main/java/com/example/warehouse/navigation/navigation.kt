@@ -87,16 +87,21 @@ fun Navigation(viewModel: MainViewModel) {
         }*/
         composable(
             "ReadWork/{work}/{chapter}",
+            //"ReadWork/{work}",
             arguments = listOf(
-                navArgument(name = "work"){
+/*                navArgument(name = "work"){
                     type = NavType.SerializableType(Works::class.java)
+                },*/
+                navArgument(name = "work"){
+                    type = NavType.StringType
                 },
                 navArgument(name = "chapter"){
                     type = NavType.StringType
                 }
             )
         ){backStackEntry ->
-            ReadWork(navController, MainViewModel(), backStackEntry.arguments?.getSerializable("work") as Works, backStackEntry.arguments?.getString("chapter"))
+            //ReadWork(navController, MainViewModel(), backStackEntry.arguments?.getSerializable("work") as Works, backStackEntry.arguments?.getString("chapter"))
+            ReadWork(navController, MainViewModel(), backStackEntry.arguments?.getString("work"), backStackEntry.arguments?.getString("chapter"))
         }
     }
 }

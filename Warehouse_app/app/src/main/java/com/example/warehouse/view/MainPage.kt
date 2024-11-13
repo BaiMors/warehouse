@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -47,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -55,6 +57,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.warehouse.R
 import com.example.warehouse.models.Gallery
+import com.example.warehouse.models.Works
 import com.example.warehouse.service.Constants
 import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
@@ -71,14 +74,9 @@ import java.util.Locale
 fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
     val wl by viewModel.popularWorks.collectAsState()
     val worksList = wl.sortedByDescending { it.likes }.take(5)
-    println("!!!!!!! вьюшка " + worksList.size)
+    println("!!!!!!! вьюшка main page " + worksList.size)
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(DarkGreen)
-    ) {
+    Column(modifier = Modifier.zIndex(1f)) {
         Text(
             text = "Добро пожаловать на Склад",
             fontSize = 22.sp,
@@ -121,9 +119,108 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                 )*/
             }
         }
+    }
+
+    val isDataLoaded by viewModel.isDataLoaded.collectAsState()
+    if (!isDataLoaded)
+    {
+        Box(
+            modifier = Modifier.fillMaxSize().background(DarkGreen),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = LightBrown)
+        }
+    }
+    else{
+        MainPageContent(navHost, worksList)
+    }
+    Box {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(57.dp)
+                .border(1.dp, DarkGreen)
+                .align(Alignment.BottomCenter)
+                .background(LightGreen),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Box(modifier = Modifier
+                .background(DarkGreen)
+                .border(2.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("MainPage") }) {
+                Icon(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = "",
+                    tint = Brown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+            Box(modifier = Modifier
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("Search") }) {
+                Icon(
+                    painter = painterResource(R.drawable.search),
+                    contentDescription = "",
+                    tint = LightBrown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+            Box(modifier = Modifier
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("Catalogue") }) {
+                Icon(
+                    painter = painterResource(R.drawable.catalogue),
+                    contentDescription = "",
+                    tint = LightBrown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+            Box(modifier = Modifier
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("Profile") }) {
+                Icon(
+                    painter = painterResource(R.drawable.profile),
+                    contentDescription = "",
+                    tint = LightBrown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MainPageContent(navHost: NavHostController, worksList: List<Works>){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(DarkGreen)
+    ) {
         Box(modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()) {
+            .fillMaxHeight()
+            .padding(top = 150.dp)) {
             LazyColumn(
                 Modifier
                     .fillMaxHeight()
@@ -143,7 +240,12 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                     .padding(start = 14.dp, end = 14.dp, top = 10.dp)
                             ) {
                                 Box(modifier = Modifier.fillMaxWidth()) {
-                                    Box(modifier = Modifier.width(270.dp).clickable { navHost.navigate("ReadWork/${work}/${work.chapters!![0].id}") }) {
+                                    Box(modifier = Modifier.width(270.dp)
+                                        .clickable {
+                                            navHost.navigate("ReadWork/${work.id}/${work.chapters!![0].id}")
+                                            //navHost.navigate("ReadWork/${work}")
+                                            //println("id главы работы на которую нажали "+work.chapters!![0].id)
+                                        }) {
                                         Text(
                                             text = work.name,
                                             fontSize = 19.sp,
@@ -307,7 +409,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                                                 contentDescription = "",
                                                 tint = Brown,
                                                 modifier = Modifier
-                                                .align(Alignment.CenterStart)
+                                                    .align(Alignment.CenterStart)
                                             )
                                             Text(
                                                 text = work.date.removeRange(
@@ -390,77 +492,6 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                             )
                         }
                     }
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(57.dp)
-                    .border(1.dp, DarkGreen)
-                    .align(Alignment.BottomCenter)
-                    .background(LightGreen),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Box(modifier = Modifier
-                    .background(DarkGreen)
-                    .border(2.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f)
-                    .clickable { navHost.navigate("MainPage") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.home),
-                        contentDescription = "",
-                        tint = Brown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
-                }
-                Box(modifier = Modifier
-                    .background(LightGreen)
-                    .border(1.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f)
-                    .clickable { navHost.navigate("Search") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.search),
-                        contentDescription = "",
-                        tint = LightBrown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
-                }
-                Box(modifier = Modifier
-                    .background(LightGreen)
-                    .border(1.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f)
-                    .clickable { navHost.navigate("Catalogue") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.catalogue),
-                        contentDescription = "",
-                        tint = LightBrown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
-                }
-                Box(modifier = Modifier
-                    .background(LightGreen)
-                    .border(1.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f)
-                    .clickable { navHost.navigate("Profile") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.profile),
-                        contentDescription = "",
-                        tint = LightBrown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
                 }
             }
         }

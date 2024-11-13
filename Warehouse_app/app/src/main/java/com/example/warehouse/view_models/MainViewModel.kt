@@ -23,6 +23,9 @@ open class MainViewModel:ViewModel() {
     val _worksList = MutableStateFlow<List<Works>>(emptyList())
     var worksList: StateFlow<List<Works>> = _worksList
 
+    private val _isDataLoaded = MutableStateFlow(false)
+    val isDataLoaded: StateFlow<Boolean> = _isDataLoaded
+
     fun loadWorks(){
         viewModelScope.launch {
             try {
@@ -54,6 +57,8 @@ open class MainViewModel:ViewModel() {
                     work.chapters = chaptersFromDb.filter { it.work == work.id }
                     work
                 }
+                println("количество глав ай синк?? "+_worksList.value[0].chapters!![0].name)
+                _isDataLoaded.value = true
             }
             catch (e: Exception) {
                 Log.e("MainPageViewModel", "Error fetching data: ${e.localizedMessage}")

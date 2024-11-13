@@ -105,7 +105,7 @@ fun CatalogueOpen(navHost: NavHostController, viewModel: CatalogueVM, category: 
                                             .padding(start = 14.dp, end = 14.dp, top = 10.dp)
                                     ) {
                                         Box(modifier = Modifier.fillMaxWidth()) {
-                                            Box(modifier = Modifier.width(270.dp)) {
+                                            Box(modifier = Modifier.width(270.dp).clickable { navHost.navigate("ReadWork/${item.id}/${item.chapters!![0].id}") }) {
                                                 Text(
                                                     text = item.name,
                                                     fontSize = 19.sp,

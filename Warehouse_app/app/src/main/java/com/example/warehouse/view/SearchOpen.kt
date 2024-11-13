@@ -101,7 +101,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                     .padding(start = 14.dp, end = 14.dp, top = 10.dp)
                             ) {
                                 Box(modifier = Modifier.fillMaxWidth()) {
-                                    Box(modifier = Modifier.width(270.dp)) {
+                                    Box(modifier = Modifier.width(270.dp).clickable { navHost.navigate("ReadWork/${work.id}/${work.chapters!![0].id}") }) {
                                         Text(
                                             text = work.name,
                                             fontSize = 19.sp,
