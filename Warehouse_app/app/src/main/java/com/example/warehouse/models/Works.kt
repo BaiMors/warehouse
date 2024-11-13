@@ -18,5 +18,6 @@ data class Works(
     var author1: Users? = null,
     var fandoms: List<Work_fandoms>? = null,
     var tags: List<Work_tags>? = null,
-    var gallery: List<Gallery>? = null
-)
+    var gallery: List<Gallery>? = null,
+    var chapters: List<Chapters>? = null
+) : java.io.Serializable

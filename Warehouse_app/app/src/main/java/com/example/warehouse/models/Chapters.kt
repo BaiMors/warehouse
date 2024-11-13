@@ -8,5 +8,5 @@ data class Chapters(
     val name: String,
     val content: String,
     val work: String,
-    val service_data: String
+    val service_data: String?
 )

@@ -382,17 +382,32 @@ fun CatalogueOpen(navHost: NavHostController, viewModel: CatalogueVM, category: 
                         }
 
                         is Fandoms -> {
-                            Text(text = item.name, fontSize = 16.sp, modifier = Modifier.padding(top = 20.dp, start = 30.dp), color = LightBrown)
+                            Text(
+                                text = item.name,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 20.dp, start = 30.dp)
+                                    .clickable { navHost.navigate("CategoryOpen/${"Фандомы"}/${item.name}") },
+                                color = LightBrown)
                             HorizontalDivider(thickness = 1.dp, color = Brown, modifier = Modifier.padding(start = 21.dp, end = 21.dp, top = 20.dp))
                         }
 
                         is Tags -> {
-                            Text(text = item.name, fontSize = 16.sp, modifier = Modifier.padding(top = 20.dp, start = 30.dp), color = LightBrown)
+                            Text(
+                                text = item.name,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 20.dp, start = 30.dp)
+                                    .clickable { navHost.navigate("CategoryOpen/${"Тэги"}/${item.name}") },
+                                color = LightBrown)
                             HorizontalDivider(thickness = 1.dp, color = Brown, modifier = Modifier.padding(start = 21.dp, end = 21.dp, top = 20.dp))
                         }
 
                         is Users -> {
-                            Text(text = item.name, fontSize = 16.sp, modifier = Modifier.padding(top = 20.dp, start = 30.dp), color = LightBrown)
+                            Text(
+                                text = item.name,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 20.dp, start = 30.dp)
+                                    .clickable { navHost.navigate("CategoryOpen/${"Авторы"}/${item.name}") },
+                                color = LightBrown)
                             HorizontalDivider(thickness = 1.dp, color = Brown, modifier = Modifier.padding(start = 21.dp, end = 21.dp, top = 20.dp))
                         }
                     }

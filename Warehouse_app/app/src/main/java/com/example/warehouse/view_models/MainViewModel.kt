@@ -5,6 +5,7 @@ import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouse.R
+import com.example.warehouse.models.Chapters
 import com.example.warehouse.models.Fandoms
 import com.example.warehouse.models.Gallery
 import com.example.warehouse.models.Tags
@@ -32,6 +33,7 @@ open class MainViewModel:ViewModel() {
                 val fandomsFromDb = Constants.supabase.from("Fandoms").select().decodeList<Fandoms>()
                 val tagsFromDb = Constants.supabase.from("Tags").select().decodeList<Tags>()
                 val galleryFromDb = Constants.supabase.from("Gallery").select().decodeList<Gallery>()
+                val chaptersFromDb = Constants.supabase.from("Chapters").select().decodeList<Chapters>()
 
                 _worksList.value = worksFromDb.map { work ->
                     val au = authorsFromDb.find {it.id == work.author }
@@ -49,6 +51,7 @@ open class MainViewModel:ViewModel() {
                     work.fandoms = wfFromDb.filter { it.work == work.id }
                     work.tags = wtFromDb.filter { it.work == work.id }
                     work.gallery = galleryFromDb.filter { it.work == work.id }
+                    work.chapters = chaptersFromDb.filter { it.work == work.id }
                     work
                 }
             }

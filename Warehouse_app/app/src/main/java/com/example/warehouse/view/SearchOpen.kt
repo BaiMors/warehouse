@@ -52,7 +52,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
     val sw by viewModel.foundWorks.collectAsState()
     val foundWorks = sw.filter { work ->
         work.name.contains(searchStr!!, ignoreCase = true)
-    }//Ку
+    }
     println(sw.size)
     println(foundWorks.size)
     Column(

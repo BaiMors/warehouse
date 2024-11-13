@@ -23,6 +23,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,16 +32,16 @@ class MainPageViewModel: MainViewModel() {
     //var text = "я пришел из mainpageviewmodel!"
     val _popularWorks = _worksList
     //var popularWorks: StateFlow<List<Works>> = _popularWorks
-    var popularWorks: StateFlow<List<Works>> = _popularWorks
+    var popularWorks: StateFlow<List<Works>> = _popularWorks.asStateFlow()
 
-    private fun getPopularWorks(){
-        val buf = _worksList.value.sortedBy { it.likes }.take(5)
+/*    private fun getPopularWorks(){
+        _popularWorks.value  = _worksList.value.sortedByDescending { it.likes }.take(5)
         println("!!!!!!! ВЬЮ МОДЕЛЬ ")
-        _popularWorks.value = _popularWorks.value.sortedBy { it.likes }.take(5)
-    }
+        print(popularWorks.value.size)
+    }*/
 
     init {
         loadWorks()
-        getPopularWorks()
+        //getPopularWorks()
     }
 }

@@ -6,11 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.warehouse.models.Works
 import com.example.warehouse.view.Avtorization
 import com.example.warehouse.view.Catalogue
 import com.example.warehouse.view.CatalogueOpen
+import com.example.warehouse.view.CategoryOpen
 import com.example.warehouse.view.MainPage
 import com.example.warehouse.view.Profile
+import com.example.warehouse.view.ReadWork
 import com.example.warehouse.view.Registration
 import com.example.warehouse.view.Search
 import com.example.warehouse.view.SearchOpen
@@ -36,11 +39,9 @@ fun Navigation(viewModel: MainViewModel) {
         }
         composable("MainPage"){
             MainPage(navController, MainPageViewModel())
-            //MainPage()
         }
         composable("Search"){
             Search(navController, SearchViewModel())
-            //MainPage()
         }
         composable(
             "SearchOpen/{searchStr}",
@@ -51,11 +52,9 @@ fun Navigation(viewModel: MainViewModel) {
             )
         ){backStackEntry ->
             SearchOpen(navController, SearchViewModel(), backStackEntry.arguments?.getString("searchStr"))
-            //MainPage()
         }
         composable("Catalogue"){
             Catalogue(navController, CatalogueVM())
-            //MainPage()
         }
         composable(
             "CatalogueOpen/{category}",
@@ -66,11 +65,38 @@ fun Navigation(viewModel: MainViewModel) {
             )
         ){backStackEntry ->
             CatalogueOpen(navController, CatalogueVM(), backStackEntry.arguments?.getString("category"))
-            //MainPage()
+        }
+        composable(
+            "CategoryOpen/{category}/{item}",
+            arguments = listOf(
+                navArgument(name = "category"){
+                    type = NavType.StringType
+                },
+                navArgument(name = "item"){
+                    type = NavType.StringType
+                }
+            )
+        ){backStackEntry ->
+            CategoryOpen(navController, CatalogueVM(), backStackEntry.arguments?.getString("category"), backStackEntry.arguments?.getString("item"))
         }
         composable("Profile"){
             Profile(navController, ProfileVM())
-            //MainPage()
+        }
+/*        composable("ReadWork"){
+            ReadWork()
+        }*/
+        composable(
+            "ReadWork/{work}/{chapter}",
+            arguments = listOf(
+                navArgument(name = "work"){
+                    type = NavType.SerializableType(Works::class.java)
+                },
+                navArgument(name = "chapter"){
+                    type = NavType.StringType
+                }
+            )
+        ){backStackEntry ->
+            ReadWork(navController, MainViewModel(), backStackEntry.arguments?.getSerializable("work") as Works, backStackEntry.arguments?.getString("chapter"))
         }
     }
 }
