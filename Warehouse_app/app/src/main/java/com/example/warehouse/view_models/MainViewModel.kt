@@ -1,6 +1,10 @@
 package com.example.warehouse.view_models
 
 import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,11 +24,40 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 open class MainViewModel:ViewModel() {
+
+
     val _worksList = MutableStateFlow<List<Works>>(emptyList())
     var worksList: StateFlow<List<Works>> = _worksList
 
     private val _isDataLoaded = MutableStateFlow(false)
     val isDataLoaded: StateFlow<Boolean> = _isDataLoaded
+
+/*    private var cachedData: List<Works>? = null
+    fun getDataFromCache(): List<Works>{
+        return cachedData ?: emptyList()
+    }
+    fun saveToCache(data: List<Works>){
+        cachedData = data
+    }
+
+    @Composable
+    fun getWorks(){
+        val data = remember {
+            mutableStateOf<List<Works>>(emptyList())
+        }
+        LaunchedEffect(Unit) {
+            val cachedData = getDataFromCache()
+            if (cachedData.isNullOrEmpty()){
+                val freshData = _worksList.value
+                data.value = freshData
+                saveToCache(freshData)
+            }
+            else{
+                data.value = cachedData
+            }
+        }
+    }*/
+
 
     fun loadWorks(){
         viewModelScope.launch {

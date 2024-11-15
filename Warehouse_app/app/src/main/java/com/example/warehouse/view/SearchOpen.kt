@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -36,10 +38,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.warehouse.R
 import com.example.warehouse.models.Gallery
+import com.example.warehouse.models.Works
 import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
@@ -47,7 +51,7 @@ import com.example.warehouse.ui.theme.LightGreen
 import com.example.warehouse.view_models.SearchViewModel
 
 @Composable
-fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr: String?){
+fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr: String?) {
     println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ya searchOpen $searchStr")
     val sw by viewModel.foundWorks.collectAsState()
     val foundWorks = sw.filter { work ->
@@ -57,10 +61,8 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
     println(foundWorks.size)
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(DarkGreen)
-    ){
+            .zIndex(1f)
+    ) {
         Row {
             Box {
                 Icon(
@@ -69,7 +71,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                     tint = LightBrown,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
-                    .padding(start = 21.dp, end = 21.dp, bottom = 25.dp, top = 45.dp)
+                        .padding(start = 21.dp, end = 21.dp, bottom = 25.dp, top = 45.dp)
                         .clickable { navHost.navigate("Search") }
                 )
             }
@@ -81,11 +83,116 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                 modifier = Modifier.padding(top = 45.dp, bottom = 25.dp)
             )
         }
-        Box(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+    }
+
+    val isDataLoaded by viewModel.isDataLoaded.collectAsState()
+    if (!isDataLoaded) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DarkGreen),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = LightBrown)
+        }
+    } else {
+        SearchOpenContent(navHost, foundWorks)
+    }
+
+    Box {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(57.dp)
+                .border(1.dp, DarkGreen)
+                .align(Alignment.BottomCenter)
+                .background(LightGreen),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Box(modifier = Modifier
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("MainPage") }) {
+                Icon(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = "",
+                    tint = LightBrown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+            Box(modifier = Modifier
+                .background(DarkGreen)
+                .border(2.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("Search") }) {
+                Icon(
+                    painter = painterResource(R.drawable.search),
+                    contentDescription = "",
+                    tint = Brown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+            Box(modifier = Modifier
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("Catalogue") }) {
+                Icon(
+                    painter = painterResource(R.drawable.catalogue),
+                    contentDescription = "",
+                    tint = LightBrown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+            Box(modifier = Modifier
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
+                .height(57.dp)
+                .weight(1f)
+                .clickable { navHost.navigate("Profile") }) {
+                Icon(
+                    painter = painterResource(R.drawable.profile),
+                    contentDescription = "",
+                    tint = LightBrown,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                    //.padding(end = 21.dp, bottom = 25.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchOpenContent(navHost: NavHostController, foundWorks: List<Works>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(DarkGreen)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(top = 100.dp)
+        ) {
             LazyColumn(
                 Modifier
                     .fillMaxHeight()
-                    .padding(bottom = 60.dp)) {
+                    .padding(bottom = 60.dp)
+            ) {
                 items(foundWorks) { work ->
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Column(
@@ -101,7 +208,9 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                     .padding(start = 14.dp, end = 14.dp, top = 10.dp)
                             ) {
                                 Box(modifier = Modifier.fillMaxWidth()) {
-                                    Box(modifier = Modifier.width(270.dp).clickable { navHost.navigate("ReadWork/${work.id}/${work.chapters!![0].id}") }) {
+                                    Box(modifier = Modifier
+                                        .width(270.dp)
+                                        .clickable { navHost.navigate("ReadWork/${work.id}/${work.chapters!![0].id}") }) {
                                         Text(
                                             text = work.name,
                                             fontSize = 19.sp,
@@ -213,7 +322,9 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             work.fandoms?.map { it.fandom1?.name }?.let {
                                                 Text(
-                                                    text = it.joinToString(", "), fontSize = 12.sp, color = LightBrown,
+                                                    text = it.joinToString(", "),
+                                                    fontSize = 12.sp,
+                                                    color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -233,7 +344,9 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             work.author1?.let {
                                                 Text(
-                                                    text = it.name, fontSize = 12.sp, color = LightBrown,
+                                                    text = it.name,
+                                                    fontSize = 12.sp,
+                                                    color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -243,7 +356,11 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                         }
 
                                     }
-                                    HorizontalDivider(thickness = 1.dp, color = Brown.copy(alpha = 0.5f), modifier = Modifier.padding(top = 5.dp, bottom = 7.dp))
+                                    HorizontalDivider(
+                                        thickness = 1.dp,
+                                        color = Brown.copy(alpha = 0.5f),
+                                        modifier = Modifier.padding(top = 5.dp, bottom = 7.dp)
+                                    )
                                     Row(modifier = Modifier.padding(bottom = 5.dp)) {
                                         Box {
                                             Icon(
@@ -255,7 +372,9 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                             )
                                             work.tags?.map { it.tag1?.name }?.let {
                                                 Text(
-                                                    text = it.joinToString(", "), fontSize = 12.sp, color = LightBrown,
+                                                    text = it.joinToString(", "),
+                                                    fontSize = 12.sp,
+                                                    color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),
@@ -265,7 +384,11 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                         }
 
                                     }
-                                    HorizontalDivider(thickness = 1.dp, color = Brown.copy(alpha = 0.5f), modifier = Modifier.padding(top = 5.dp, bottom = 7.dp))
+                                    HorizontalDivider(
+                                        thickness = 1.dp,
+                                        color = Brown.copy(alpha = 0.5f),
+                                        modifier = Modifier.padding(top = 5.dp, bottom = 7.dp)
+                                    )
                                     Row(modifier = Modifier.padding(bottom = 5.dp)) {
                                         Box {
                                             Icon(
@@ -276,7 +399,9 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                                 //.align(Alignment.CenterStart)
                                             )
                                             Text(
-                                                text = work.status, fontSize = 12.sp, color = LightBrown,
+                                                text = work.status,
+                                                fontSize = 12.sp,
+                                                color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -336,7 +461,9 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                                                 //.align(Alignment.CenterStart)
                                             )
                                             Text(
-                                                text = work.likes.toString(), fontSize = 12.sp, color = LightBrown,
+                                                text = work.likes.toString(),
+                                                fontSize = 12.sp,
+                                                color = LightBrown,
                                                 modifier = Modifier
                                                     .align(CenterEnd)
                                                     .padding(start = 30.dp),
@@ -375,72 +502,6 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                             )
                         }
                     }
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .height(57.dp)
-                    .border(1.dp, DarkGreen)
-                    .align(Alignment.BottomCenter)
-                    .background(LightGreen),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Box(modifier = Modifier
-                    .background(LightGreen)
-                    .border(1.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f).clickable { navHost.navigate("MainPage") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.home),
-                        contentDescription = "",
-                        tint = LightBrown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
-                }
-                Box(modifier = Modifier
-                    .background(DarkGreen)
-                    .border(2.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f).clickable { navHost.navigate("Search") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.search),
-                        contentDescription = "",
-                        tint = Brown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
-                }
-                Box(modifier = Modifier
-                    .background(LightGreen)
-                    .border(1.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f).clickable { navHost.navigate("Catalogue") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.catalogue),
-                        contentDescription = "",
-                        tint = LightBrown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
-                }
-                Box(modifier = Modifier
-                    .background(LightGreen)
-                    .border(1.dp, LightGreen)
-                    .height(57.dp)
-                    .weight(1f).clickable { navHost.navigate("Profile") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.profile),
-                        contentDescription = "",
-                        tint = LightBrown,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                        //.padding(end = 21.dp, bottom = 25.dp)
-                    )
                 }
             }
         }

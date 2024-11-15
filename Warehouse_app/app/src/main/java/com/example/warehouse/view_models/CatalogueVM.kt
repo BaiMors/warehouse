@@ -37,7 +37,7 @@ class CatalogueVM:MainViewModel() {
         }
     }
     init {
-        loadWorks()
+        //loadWorks()
         loadLists()
     }
 }

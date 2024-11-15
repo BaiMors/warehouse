@@ -142,34 +142,7 @@ fun CatalogueOpen(navHost: NavHostController, viewModel: CatalogueVM, category: 
                                         val galleryList: List<Gallery> = item.gallery ?: emptyList()
                                         LazyRow(modifier = Modifier.padding(start = 10.dp, top = 20.dp)) {
                                             items(galleryList) { image ->
-                                                //Text(text = image.image)
                                                 if (!image.image.contains("Warehouse")) {
-                                                    /*val imageState = rememberAsyncImagePainter(
-                                                        model = ImageRequest.Builder(LocalContext.current)
-                                                            .data(image.image)
-                                                            .size(Size.ORIGINAL).build()
-                                                    ).state
-                                                    if (imageState is AsyncImagePainter.State.Error) {
-                                                        Box(
-                                                            modifier = Modifier
-                                                                .fillMaxWidth()
-                                                                .height(200.dp),
-                                                            contentAlignment = Alignment.Center
-                                                        ) {
-                                                            CircularProgressIndicator()
-                                                        }
-                                                    }
-                                                    if (imageState is AsyncImagePainter.State.Success) {
-                                                        Image(
-                                                            modifier = Modifier
-                                                                .fillMaxWidth()
-                                                                .height(200.dp)
-                                                                .border(1.dp, Brown),
-                                                            painter = imageState.painter,
-                                                            contentDescription = "",
-                                                            contentScale = ContentScale.Crop,
-                                                        )
-                                                    }*/
                                                     AsyncImage(
                                                         model = image.image,
                                                         contentDescription = "",

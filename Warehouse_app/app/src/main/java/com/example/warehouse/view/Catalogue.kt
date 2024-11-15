@@ -45,12 +45,11 @@ fun Catalogue(navHost: NavHostController, viewModel: CatalogueVM) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(DarkGreen)
-            .verticalScroll(rememberScrollState())
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
-            Column(verticalArrangement = Arrangement.SpaceEvenly) {
+            Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.padding(bottom = 60.dp).verticalScroll(rememberScrollState())) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

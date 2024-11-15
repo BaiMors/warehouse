@@ -174,7 +174,8 @@ fun ReadSelectedWork(navHost: NavHostController, SelectedWork: Works, chapter: S
                     .align(Alignment.CenterHorizontally)
             )
             Column(
-                modifier = Modifier.padding(end = 13.dp)
+                modifier = Modifier
+                    //.padding(end = 13.dp)
             ) {
                 Row(modifier = Modifier.padding(top = 22.dp)) {
                     Box(
@@ -396,7 +397,7 @@ fun ReadSelectedWork(navHost: NavHostController, SelectedWork: Works, chapter: S
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
-                        .padding(start = 25.dp, end = 25.dp, bottom = 30.dp)
+                        .padding(start = 15.dp, end = 15.dp, bottom = 30.dp)
                 ) {
                     Text(
                         text = SelectedWork.chapters!!.firstOrNull{ it.id == chapter}!!.content,
@@ -419,8 +420,9 @@ fun ReadSelectedWork(navHost: NavHostController, SelectedWork: Works, chapter: S
                                     text = chapt.name,
                                     fontSize = 16.sp,
                                     color = LightBrown,
-                                    modifier = Modifier.background(DarkGreen)
-                                        .border(2.dp, LightGreen)
+                                    modifier = Modifier
+                                        //.background(DarkGreen)
+                                        //.border(2.dp, LightGreen)
                                         .padding(10.dp)
                                         .align(Center)
                                         .clickable { navHost.navigate("ReadWork/${SelectedWork.id}/${chapt.id}") }
