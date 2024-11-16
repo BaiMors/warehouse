@@ -10,4 +10,7 @@ data class Users(
     val description: String?,
     val title: String?,
     val image: String?,
+
+    var my_works: List<Works>? = null,
+    var fav_works: List<Works>? = null
 )

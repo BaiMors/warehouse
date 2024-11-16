@@ -1,5 +1,6 @@
 package com.example.warehouse
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.warehouse.navigation.Navigation
 import com.example.warehouse.ui.theme.WarehouseTheme
@@ -30,7 +32,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(viewModel)
+                    MainViewModel.PrefsHelper.init(this)
+                    Navigation(viewModel, LocalContext.current)
                 }
             }
         }

@@ -65,6 +65,7 @@ import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.ui.theme.LightGreen
 import com.example.warehouse.view_models.AvtorizationVM
 import com.example.warehouse.view_models.MainPageViewModel
+import com.example.warehouse.view_models.MainViewModel
 import kotlinx.datetime.LocalDate
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
@@ -75,6 +76,8 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
     val wl by viewModel.popularWorks.collectAsState()
     val worksList = wl.sortedByDescending { it.likes }.take(5)
     println("!!!!!!! вьюшка main page " + worksList.size)
+    val userEmail = MainViewModel.PrefsHelper.getSharedPreferences().getString("user_email", null)
+    println("сейчас пользователь " + userEmail)
 
     Column(modifier = Modifier.zIndex(1f)) {
         Text(

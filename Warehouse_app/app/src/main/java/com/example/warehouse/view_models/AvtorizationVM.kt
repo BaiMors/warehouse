@@ -1,5 +1,6 @@
 package com.example.warehouse.view_models
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouse.models.Users
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AvtorizationVM:ViewModel(){
+    //val sp: SharedPreferences? = null
 
     sealed class Result {
         data class Success(val user: Any) : Result()  // Успех

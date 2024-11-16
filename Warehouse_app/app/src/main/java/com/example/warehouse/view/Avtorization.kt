@@ -1,5 +1,7 @@
 package com.example.warehouse.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -44,6 +46,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavHostController
+import com.example.warehouse.navigation.Navigation
+import com.example.warehouse.view_models.MainViewModel
 
 //navHost: NavHostController, viewModel: AvtorizationVM.Companion
 //@Preview
@@ -201,4 +205,16 @@ fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
             // Ожидание результата, ничего не делаем
         }
     }
+
+/*    // Получение экземпляра SharedPreferences
+    //val sharedPreferences = ctx.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val editor = viewModel.sp!!.edit()
+
+// Сохранение данных (например, токена сессии)
+    editor.putString("curUsEmail", email.value)
+    editor.apply() // Или `commit()` для синхронного сохранения*/
+    val editor = MainViewModel.PrefsHelper.getSharedPreferences().edit()
+    editor.putString("user_email", email.value)
+    editor.apply()
+
 }

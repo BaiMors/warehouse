@@ -1,5 +1,7 @@
 package com.example.warehouse.view_models
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,12 +26,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 open class MainViewModel:ViewModel() {
+    //var sharedPreferences: SharedPreferences? = null
+
+    //объект для SharedPreferences (хранения данных о сессии), чтобы можно было обращаться к нему в любом месте приложения
+    object PrefsHelper {
+        private lateinit var sharedPreferences: SharedPreferences
+
+        fun init(context: Context) {
+            sharedPreferences = context.getSharedPreferences("user_email", Context.MODE_PRIVATE)
+        }
+
+        fun getSharedPreferences(): SharedPreferences = sharedPreferences
+    }
 
 
     val _worksList = MutableStateFlow<List<Works>>(emptyList())
     var worksList: StateFlow<List<Works>> = _worksList
 
-    private val _isDataLoaded = MutableStateFlow(false)
+    val _isDataLoaded = MutableStateFlow(false)
     val isDataLoaded: StateFlow<Boolean> = _isDataLoaded
 
 /*    private var cachedData: List<Works>? = null

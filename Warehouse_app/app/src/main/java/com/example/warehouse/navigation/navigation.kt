@@ -1,5 +1,6 @@
 package com.example.warehouse.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,6 +12,7 @@ import com.example.warehouse.view.Avtorization
 import com.example.warehouse.view.Catalogue
 import com.example.warehouse.view.CatalogueOpen
 import com.example.warehouse.view.CategoryOpen
+import com.example.warehouse.view.Intro
 import com.example.warehouse.view.MainPage
 import com.example.warehouse.view.Profile
 import com.example.warehouse.view.ReadWork
@@ -24,13 +26,29 @@ import com.example.warehouse.view_models.MainViewModel
 import com.example.warehouse.view_models.ProfileVM
 import com.example.warehouse.view_models.SearchViewModel
 
-/*Класс для перемещения по страницам*/
+/*функция для перемещения по страницам*/
 @Composable
-fun Navigation(viewModel: MainViewModel) {
+fun Navigation(viewModel: MainViewModel, context: Context) {
+/*    // Получение сохраненного токена
+    var sharedPreferences = viewModel.sharedPreferences
+    sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val userEmail = viewModel.sharedPreferences!!.getString("user_email", null)
+
+
+    if (userEmail != null) {
+        startPage = "MainPage"
+    } else {
+        startPage = "Avtorization"
+    }*/
+
+
     val navController = rememberNavController()
     NavHost(navController = navController,
-        startDestination = "Avtorization")
+        startDestination = "Intro")
     {
+        composable("Intro"){
+            Intro(navController, viewModel)
+        }
         composable("Avtorization"){
             Avtorization(navController, AvtorizationVM())
         }
