@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -69,7 +71,7 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
     val username = remember { mutableStateOf("") }
     val desc = remember { mutableStateOf("") }
     // val authResult by viewModel.create().authResult.collectAsState()
-    //val regResult by viewModel.create().regResult.collectAsState()
+    val regResult by viewModel.RegResult.collectAsState()
     val ctx = LocalContext.current
     val focusRequester1 = remember { FocusRequester() }
     val focusRequester2 = remember { FocusRequester() }
@@ -80,7 +82,7 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(DarkGreen)
-            .verticalScroll(ScrollState(0))
+            .verticalScroll(rememberScrollState())
             .imePadding()
             .padding(top = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -90,7 +92,9 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
             painter = painterResource(R.drawable.home_avt),
             contentDescription = "",
             tint = LightBrown,
-            modifier = Modifier.padding(bottom = 30.dp)
+            modifier = Modifier
+                .padding(bottom = 30.dp)
+                .align(Alignment.CenterHorizontally),
         )
         Text(
             "Регистрация",
@@ -283,7 +287,7 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
                 colors = ButtonDefaults.buttonColors(Brown),
                 shape = RoundedCornerShape(3.dp),
                 onClick = {
-                    navHost.navigate("")
+                    viewModel.onSignUpEmail(email.value, password.value, name.value, username.value, desc.value)
                 }) {
                 Text(
                     "Зарегистрироваться",
@@ -310,6 +314,21 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+        }
+    }
+
+    // Обработка результата авторизации
+    when (regResult) {
+        is AvtorizationVM.Result.Success -> {
+            // Если авторизация успешна, навигация на другой экран
+            navHost.navigate("MainPage")
+        }
+        is AvtorizationVM.Result.Error -> {
+            // Если произошла ошибка, показываем сообщение об ошибке
+            Toast.makeText(ctx, "Error: ${(regResult as AvtorizationVM.Result.Error).message}", Toast.LENGTH_SHORT).show()
+        }
+        null -> {
+            // Ожидание результата, ничего не делаем
         }
     }
 }

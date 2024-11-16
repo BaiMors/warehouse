@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler) //плагин для версии котлин 2.ч и более или типа того
 
-    kotlin("plugin.serialization") version "2.0.20"
-    id("kotlin-kapt")
+   kotlin("plugin.serialization") version "2.0.20"
+/*     id("kotlin-kapt")*/
 }
 
 android {
@@ -22,9 +22,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        kapt {
+/*        kapt {
             arguments {arg("room.schemaLocation", "$projectDir/schemas")}
-        }
+        }*/
     }
 
     buildTypes {
@@ -58,9 +58,9 @@ android {
 
 dependencies {
 
-    implementation ("androidx.room:room-runtime:2.5.0") // Библиотека "Room"
+/*    implementation ("androidx.room:room-runtime:2.5.0") // Библиотека "Room"
     kapt ("androidx.room:room-compiler:2.5.0") // Кодогенератор
-    implementation ("androidx.room:room-ktx:2.5.0") // Дополнительно для Kotlin Coroutines, Kotlin Flows
+    implementation ("androidx.room:room-ktx:2.5.0") // Дополнительно для Kotlin Coroutines, Kotlin Flows*/
 
     implementation(platform("io.github.jan-tennert.supabase:bom:3.0.0")) //основа супабейз???
     implementation("io.github.jan-tennert.supabase:postgrest-kt") //для поддержки постгри

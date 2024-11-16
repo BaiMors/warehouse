@@ -1,5 +1,6 @@
 package com.example.warehouse.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -33,11 +34,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavHostController
 
@@ -47,12 +51,15 @@ import androidx.navigation.NavHostController
 fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    // val authResult by viewModel.create().authResult.collectAsState()
+    val authResult by viewModel.AuthResult.collectAsState()
     //val regResult by viewModel.create().regResult.collectAsState()
-    //val ctx = LocalContext.current
+    val ctx = LocalContext.current
     val focusRequester1 = remember { FocusRequester() }
     val focusRequester2 = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+
+
+
 
     Column(
         Modifier
@@ -150,7 +157,7 @@ fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
                 colors = ButtonDefaults.buttonColors(Brown),
                 shape = RoundedCornerShape(3.dp),
                 onClick = {
-                    navHost.navigate("")
+                    viewModel.onSignInEmailPassword(email.value, password.value)
                 }) {
                 Text(
                     "Войти",
@@ -177,6 +184,21 @@ fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+        }
+    }
+
+    // Обработка результата авторизации
+    when (authResult) {
+        is AvtorizationVM.Result.Success -> {
+            // Если авторизация успешна, навигация на другой экран
+            navHost.navigate("MainPage")
+        }
+        is AvtorizationVM.Result.Error -> {
+            // Если произошла ошибка, показываем сообщение об ошибке
+            Toast.makeText(ctx, "Error: ${(authResult as AvtorizationVM.Result.Error).message}", Toast.LENGTH_SHORT).show()
+        }
+        null -> {
+            // Ожидание результата, ничего не делаем
         }
     }
 }

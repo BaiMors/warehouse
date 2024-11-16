@@ -29,7 +29,7 @@ import com.example.warehouse.view_models.SearchViewModel
 fun Navigation(viewModel: MainViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController,
-        startDestination = "MainPage")
+        startDestination = "Avtorization")
     {
         composable("Avtorization"){
             Avtorization(navController, AvtorizationVM())

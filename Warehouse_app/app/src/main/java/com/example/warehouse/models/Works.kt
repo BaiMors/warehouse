@@ -1,7 +1,7 @@
 package com.example.warehouse.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+/*import androidx.room.Entity
+import androidx.room.PrimaryKey*/
 import kotlinx.serialization.Serializable
 import java.sql.Date
 import java.sql.Timestamp
