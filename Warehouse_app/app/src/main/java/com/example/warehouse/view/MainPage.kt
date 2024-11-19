@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment.Companion.Rectangle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -49,9 +50,11 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
@@ -66,6 +69,7 @@ import com.example.warehouse.ui.theme.LightGreen
 import com.example.warehouse.view_models.AvtorizationVM
 import com.example.warehouse.view_models.MainPageViewModel
 import com.example.warehouse.view_models.MainViewModel
+import io.github.jan.supabase.auth.auth
 import kotlinx.datetime.LocalDate
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
@@ -74,10 +78,12 @@ import java.util.Locale
 @Composable
 fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
     val wl by viewModel.popularWorks.collectAsState()
+
     val worksList = wl.sortedByDescending { it.likes }.take(5)
     println("!!!!!!! вьюшка main page " + worksList.size)
     val userEmail = MainViewModel.PrefsHelper.getSharedPreferences().getString("user_email", null)
     println("сейчас пользователь " + userEmail)
+    worksList.forEach { println(it.name.toString() + " " + it.isliked.toString()) }
 
     Column(modifier = Modifier.zIndex(1f)) {
         Text(
@@ -135,7 +141,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
         }
     }
     else{
-        MainPageContent(navHost, worksList)
+        MainPageContent(navHost, worksList, viewModel)
     }
     Box {
         Row(
@@ -213,7 +219,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
 }
 
 @Composable
-fun MainPageContent(navHost: NavHostController, worksList: List<Works>){
+fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewModel: MainPageViewModel){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -262,14 +268,31 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>){
                                                 .align(Alignment.CenterStart)
                                         )
                                     }
-                                    Icon(
+/*                                    Icon(
                                         painter = painterResource(R.drawable.outlined),
                                         contentDescription = "",
                                         tint = Brown,
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .padding(end = 12.dp, top = 15.dp)
-                                    )
+                                            .clickable {
+                                                if (work.isliked)
+                                            }
+                                    )*/
+                                    Box(modifier = Modifier.align(Alignment.TopEnd).padding(end = 12.dp, top = 15.dp)) {
+                                        viewModel.LikeButton(
+                                            il = work.isliked,
+                                            onLikeClick = {
+                                                if (work.isliked) work.isliked = false;
+                                                else work.isliked = true
+                                                println("isliked ${work.isliked}");
+                                                //println("!!!curworkid = "+viewModel.currentWorkId)
+                                                viewModel.toggleLike(work.id, Constants.supabase.auth.currentUserOrNull()!!.id, work.isliked) },
+
+                                            //curid = viewModel.currentWorkId,
+                                            //workId = work.id
+                                        )
+                                    }
                                 }
                             }
                             Row(

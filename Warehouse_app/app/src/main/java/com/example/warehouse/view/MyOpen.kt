@@ -224,7 +224,7 @@ fun MyOpenContent(navHost: NavHostController, myWorks: List<Works>){
                                         )
                                     }
                                     Icon(
-                                        painter = painterResource(R.drawable.outlined),
+                                        painter = painterResource(R.drawable.author),
                                         contentDescription = "",
                                         tint = Brown,
                                         modifier = Modifier

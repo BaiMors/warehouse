@@ -29,7 +29,7 @@ import kotlinx.coroutines.delay
 fun Intro(navHost: NavHostController, viewModel: MainViewModel){
     LaunchedEffect(Unit) {
         // Задержка на 2 секунды
-        delay(500)
+        delay(100)
         //
 /*        val editor = MainViewModel.PrefsHelper.getSharedPreferences().edit()
         editor.clear().apply()*/
