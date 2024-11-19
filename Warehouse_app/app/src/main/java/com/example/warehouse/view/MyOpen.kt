@@ -1,7 +1,5 @@
 package com.example.warehouse.view
 
-import android.view.Gravity
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,7 +30,6 @@ import androidx.compose.ui.Alignment.Companion.CenterEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -44,21 +41,23 @@ import coil.compose.AsyncImage
 import com.example.warehouse.R
 import com.example.warehouse.models.Gallery
 import com.example.warehouse.models.Works
+import com.example.warehouse.service.Constants
 import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.ui.theme.LightGreen
-import com.example.warehouse.view_models.SearchViewModel
+import com.example.warehouse.view_models.MainViewModel
+import com.example.warehouse.view_models.ProfileVM
+import io.github.jan.supabase.auth.auth
 
 @Composable
-fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr: String?) {
-    println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ya searchOpen $searchStr")
-    val sw by viewModel.foundWorks.collectAsState()
-    val foundWorks = sw.filter { work ->
-        work.name.contains(searchStr!!, ignoreCase = true)
+fun MyOpen(navHost: NavHostController, viewModel: MainViewModel){
+    val mw by viewModel.worksList.collectAsState()
+    val myWorks = mw.filter { work ->
+        work.author == Constants.supabase.auth.currentUserOrNull()!!.id
     }
-    println(sw.size)
-    println(foundWorks.size)
+    println(mw.size)
+    println(myWorks.size)
     Column(
         modifier = Modifier
             .zIndex(1f)
@@ -72,11 +71,11 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(start = 21.dp, end = 21.dp, bottom = 25.dp, top = 45.dp)
-                        .clickable { navHost.navigate("Search") }
+                        .clickable { navHost.navigate("Profile") }
                 )
             }
             Text(
-                text = "Поиск по запросу $searchStr",
+                text = "Мои работы",
                 fontSize = 20.sp,
                 color = Brown,
                 textAlign = TextAlign.Left,
@@ -95,19 +94,8 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
         ) {
             CircularProgressIndicator(color = LightBrown)
         }
-    }
-    else if (isDataLoaded && foundWorks.isEmpty()){
-        Box(modifier = Modifier.fillMaxSize().background(DarkGreen)) {
-            Text(
-                text = "Ничего не найдено",
-                fontSize = 22.sp,
-                color = LightBrown,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-    }
-    else {
-        SearchOpenContent(navHost, foundWorks)
+    } else {
+        MyOpenContent(navHost, myWorks)
     }
 
     Box {
@@ -123,7 +111,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
         ) {
             Box(modifier = Modifier
                 .background(LightGreen)
-                .border(1.dp, LightGreen)
+                .border(2.dp, LightGreen)
                 .height(57.dp)
                 .weight(1f)
                 .clickable { navHost.navigate("MainPage") }) {
@@ -137,15 +125,15 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                 )
             }
             Box(modifier = Modifier
-                .background(DarkGreen)
-                .border(2.dp, LightGreen)
+                .background(LightGreen)
+                .border(1.dp, LightGreen)
                 .height(57.dp)
                 .weight(1f)
                 .clickable { navHost.navigate("Search") }) {
                 Icon(
                     painter = painterResource(R.drawable.search),
                     contentDescription = "",
-                    tint = Brown,
+                    tint = LightBrown,
                     modifier = Modifier
                         .align(Alignment.Center)
                     //.padding(end = 21.dp, bottom = 25.dp)
@@ -167,15 +155,15 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
                 )
             }
             Box(modifier = Modifier
-                .background(LightGreen)
-                .border(1.dp, LightGreen)
+                .background(DarkGreen)
+                .border(2.dp, LightGreen)
                 .height(57.dp)
                 .weight(1f)
                 .clickable { navHost.navigate("Profile") }) {
                 Icon(
                     painter = painterResource(R.drawable.profile),
                     contentDescription = "",
-                    tint = LightBrown,
+                    tint = Brown,
                     modifier = Modifier
                         .align(Alignment.Center)
                     //.padding(end = 21.dp, bottom = 25.dp)
@@ -186,7 +174,7 @@ fun SearchOpen(navHost: NavHostController, viewModel: SearchViewModel, searchStr
 }
 
 @Composable
-fun SearchOpenContent(navHost: NavHostController, foundWorks: List<Works>) {
+fun MyOpenContent(navHost: NavHostController, myWorks: List<Works>){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -204,7 +192,7 @@ fun SearchOpenContent(navHost: NavHostController, foundWorks: List<Works>) {
                     .fillMaxHeight()
                     .padding(bottom = 60.dp)
             ) {
-                items(foundWorks) { work ->
+                items(myWorks) { work ->
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Column(
                             modifier = Modifier

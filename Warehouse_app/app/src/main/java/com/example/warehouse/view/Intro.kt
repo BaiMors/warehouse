@@ -39,6 +39,7 @@ fun Intro(navHost: NavHostController, viewModel: MainViewModel){
 
         if (userEmail != null) {
             // Перейти к главному экрану
+            viewModel.loadWorks()
             navHost.navigate("MainPage"){
                 popUpTo("Intro") { inclusive = true }
             }

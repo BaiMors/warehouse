@@ -27,18 +27,24 @@ class ProfileVM:MainViewModel(){
         viewModelScope.launch {
             try {
                 val authorsFromDb = Constants.supabase.from("Users").select().decodeList<Users>()
+                println("получили лист юзеров")
                 val favworksFromDb = Constants.supabase.from("Favorite_works").select().decodeList<Works>()
-                if (_isDataLoaded.value)
-                {
+                println("получили лист любимых работ")
+                println("загрузились ли данные о работах "+_isDataLoaded.value)
+                //if (_isDataLoaded.value)
+                //{
                     _userList.value = authorsFromDb.map { formap ->
                         val mv = _worksList.value.filter { it.author == formap.id }
                         val fv = favworksFromDb.filter { it.author == formap.id }
                         formap.my_works = mv
+                        println("получили свои работы")
                         formap.fav_works = fv
+                        println("получили любимые работы")
                         formap
                     }
+                    println("пользователь должен загрузиться")
                     _isUserLoaded.value = true
-                }
+                //}
             }
             catch (e: Exception) {
                 Log.e("MainPageViewModel", "Error fetching data: ${e.localizedMessage}")

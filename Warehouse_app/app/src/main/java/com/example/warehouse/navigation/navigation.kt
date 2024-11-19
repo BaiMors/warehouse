@@ -12,13 +12,16 @@ import com.example.warehouse.view.Avtorization
 import com.example.warehouse.view.Catalogue
 import com.example.warehouse.view.CatalogueOpen
 import com.example.warehouse.view.CategoryOpen
+import com.example.warehouse.view.FavotitesOpen
 import com.example.warehouse.view.Intro
 import com.example.warehouse.view.MainPage
+import com.example.warehouse.view.MyOpen
 import com.example.warehouse.view.Profile
 import com.example.warehouse.view.ReadWork
 import com.example.warehouse.view.Registration
 import com.example.warehouse.view.Search
 import com.example.warehouse.view.SearchOpen
+import com.example.warehouse.view.UpdateProfile
 import com.example.warehouse.view_models.AvtorizationVM
 import com.example.warehouse.view_models.CatalogueVM
 import com.example.warehouse.view_models.MainPageViewModel
@@ -100,9 +103,15 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
         composable("Profile"){
             Profile(navController, ProfileVM())
         }
-/*        composable("ReadWork"){
-            ReadWork()
-        }*/
+        composable("UpdateProfile"){
+            UpdateProfile()
+        }
+        composable("FavotitesOpen"){
+            FavotitesOpen()
+        }
+        composable("MyOpen"){
+            MyOpen(navController, MainViewModel())
+        }
         composable(
             "ReadWork/{work}/{chapter}",
             //"ReadWork/{work}",
