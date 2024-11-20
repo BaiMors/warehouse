@@ -8,9 +8,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouse.R
 import com.example.warehouse.models.Fandoms
+import com.example.warehouse.models.Favorite_works
 import com.example.warehouse.models.Gallery
 import com.example.warehouse.models.Tags
 import com.example.warehouse.models.Users
@@ -27,6 +30,7 @@ import com.example.warehouse.models.Work_tags
 import com.example.warehouse.models.Works
 import com.example.warehouse.service.Constants
 import com.example.warehouse.ui.theme.Brown
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -84,11 +88,12 @@ class MainPageViewModel: MainViewModel() {
     }*/
     var ic by mutableStateOf(false)
 
+
     fun toggleLike(workId: String, userId: String, currentIsNotLiked: Boolean) {
         viewModelScope.launch {
+            println("я зашел в toggleLike, чтобы лайкнуть работу " + workId)
             if (currentIsNotLiked == false) {
                 // Удаление из избранного
-                ic = false
                 Constants.supabase.from("Favorite_works").delete {
                     select()
                     filter {
@@ -104,7 +109,6 @@ class MainPageViewModel: MainViewModel() {
                 Constants.supabase.postgrest.rpc("remove_likes", jsonObject)
             }
             else {
-                ic = true
                 // Добавление в избранное
                 Constants.supabase.from("Favorite_works").insert(
                     mapOf("work" to workId, "user" to userId)
@@ -164,7 +168,7 @@ class MainPageViewModel: MainViewModel() {
     ) {
         IconButton(onClick = onLikeClick) {
             Icon(
-                painter = if (ic) painterResource(R.drawable.filled) else painterResource(R.drawable.outlined),
+                painter = if (il) painterResource(R.drawable.filled) else painterResource(R.drawable.outlined),
                 contentDescription = if (il) "Liked" else "Not Liked",
                 tint = Brown,
                 modifier = Modifier

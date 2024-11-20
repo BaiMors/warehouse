@@ -30,6 +30,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterEnd
@@ -212,7 +216,8 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel, viewModel
 
 @Composable
 fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewModel: MainPageViewModel){
-    var ic = viewModel.ic
+    val likedStates = viewModel.likedStates
+    println("count likedstates = "+likedStates.size)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -259,19 +264,25 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                                 .align(Alignment.CenterStart)
                                         )
                                     }
+                                    println("likedstate = "+likedStates[work.id])
+                                    val isLiked = likedStates[work.id] ?: false
                                     Box(modifier = Modifier
                                         .align(Alignment.TopEnd)
                                         .padding(end = 12.dp, top = 15.dp)) {
                                         viewModel.LikeButton(
-                                            il = work.isliked,
+                                            il = isLiked,
                                             onLikeClick = {
-                                                if (work.isliked) { work.isliked = false; ic = false}
-                                                else {work.isliked = true; ic = true }
+                                                likedStates[work.id] = !isLiked
+/*                                                if (work.isliked) { work.isliked = false; ic = false}
+                                                else {work.isliked = true; ic = true }*/
                                                 println("isliked ${work.isliked}");
-                                                viewModel.toggleLike(
-                                                    work.id,
-                                                    Constants.supabase.auth.currentUserOrNull()!!.id,
-                                                    work.isliked)
+                                                likedStates[work.id]?.let {
+                                                    viewModel.toggleLike(
+                                                        work.id,
+                                                        Constants.supabase.auth.currentUserOrNull()!!.id,
+                                                        it
+                                                    )
+                                                }
                                                 //navHost.navigate("MainPage")
                                                           },
                                         )

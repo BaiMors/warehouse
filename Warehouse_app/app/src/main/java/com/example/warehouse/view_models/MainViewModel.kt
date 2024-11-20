@@ -12,9 +12,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -37,7 +39,9 @@ import com.example.warehouse.ui.theme.Brown
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.request.RpcRequestBuilder
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -139,16 +143,54 @@ open class MainViewModel : ViewModel() {
                 }
                 //println("название главы?? " + _worksList.value[0].chapters!![0].name)
                 _isDataLoaded.value = true
+                loadLikedStates()
             } catch (e: Exception) {
                 Log.e("MainPageViewModel", "Error fetching data: ${e.localizedMessage}")
+                Log.e("MainPageViewModel", "Error fetching data: ${e.stackTrace}")
+                Log.e("MainPageViewModel", "Error fetching data: ${e.cause}")
+                Log.e("MainPageViewModel", "Error fetching data: ${e.message}")
+                Log.e("MainPageViewModel", "Error fetching data: ${e.suppressed}")
             }
         }
     }
 
 
+    var likedStates : SnapshotStateMap<String, Boolean> = mutableStateMapOf()
+        private set
+    fun loadLikedStates(){
+        println("!!!!!!привет из loadLikedStates")
+        println("!!!!!!"+isDataLoaded.value)
+
+        if (isDataLoaded.value){
+            viewModelScope.launch {
+                delay(5000)
+                val fw = Constants.supabase.from("Favorite_works").select()
+                    .decodeList<Favorite_works>().filter { it.user == Constants.supabase.auth.currentUserOrNull()!!.id }
+                val result = Constants.supabase.from("Favorite_works").select(Columns.raw("work")).decodeList<String>()
+                    .filter { it -> fw.any { work -> work.work == it } }
+                for (id in fw){
+                    likedStates[id.work] = true
+                }
+                println("из вьюмодели - размер likedstates"+likedStates.size)
+                /*            if (fw.isNotEmpty()){
+                                for (id in result){
+                                    likedStates[id] = true
+                                }
+                            }
+                            else{
+                                for (id in worksList.value){
+                                    likedStates[id.id] = false
+                                }
+                            }*/
+
+            }
+        }
+
+    }
 
 
     init {
         loadWorks()
+        //loadLikedStates()
     }
 }
