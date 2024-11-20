@@ -46,12 +46,13 @@ import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.ui.theme.LightGreen
+import com.example.warehouse.view_models.MainPageViewModel
 import com.example.warehouse.view_models.MainViewModel
 import com.example.warehouse.view_models.ProfileVM
 import io.github.jan.supabase.auth.auth
 
 @Composable
-fun MyOpen(navHost: NavHostController, viewModel: MainViewModel){
+fun MyOpen(navHost: NavHostController, viewModel: MainViewModel, viewModel1: ProfileVM){
     val mw by viewModel.worksList.collectAsState()
     val myWorks = mw.filter { work ->
         work.author == Constants.supabase.auth.currentUserOrNull()!!.id
@@ -85,7 +86,8 @@ fun MyOpen(navHost: NavHostController, viewModel: MainViewModel){
     }
 
     val isDataLoaded by viewModel.isDataLoaded.collectAsState()
-    if (!isDataLoaded) {
+    val isUserLoaded by viewModel1.isUserLoaded.collectAsState()
+    if (!isDataLoaded || !isUserLoaded) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

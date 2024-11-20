@@ -24,5 +24,6 @@ data class Works(
     var tags: List<Work_tags>? = null,
     var gallery: List<Gallery>? = null,
     var chapters: List<Chapters>? = null,
-    var isliked: Boolean = false
+    var isliked: Boolean = false,
+    var userLiked: List<Favorite_works>? = null
 )

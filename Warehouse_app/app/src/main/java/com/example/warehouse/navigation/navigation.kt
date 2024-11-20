@@ -59,7 +59,7 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
             Registration(navController, AvtorizationVM())
         }
         composable("MainPage"){
-            MainPage(navController, MainPageViewModel())
+            MainPage(navController, MainPageViewModel(),MainViewModel())
         }
         composable("Search"){
             Search(navController, SearchViewModel())
@@ -101,16 +101,16 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
             CategoryOpen(navController, CatalogueVM(), backStackEntry.arguments?.getString("category"), backStackEntry.arguments?.getString("item"))
         }
         composable("Profile"){
-            Profile(navController, ProfileVM())
+            Profile(navController, ProfileVM(), MainViewModel())
         }
         composable("UpdateProfile"){
             UpdateProfile()
         }
         composable("FavotitesOpen"){
-            FavotitesOpen()
+            FavotitesOpen(navController, MainViewModel(), ProfileVM())
         }
         composable("MyOpen"){
-            MyOpen(navController, MainViewModel())
+            MyOpen(navController, MainViewModel(), ProfileVM())
         }
         composable(
             "ReadWork/{work}/{chapter}",

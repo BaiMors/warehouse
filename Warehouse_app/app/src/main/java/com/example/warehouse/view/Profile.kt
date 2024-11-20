@@ -50,7 +50,7 @@ import io.github.jan.supabase.auth.auth
 
 //o@gmail.com
 @Composable
-fun Profile(navHost: NavHostController, viewModel: ProfileVM){
+fun Profile(navHost: NavHostController, viewModel: ProfileVM, viewModel1: MainViewModel){
     val ul = viewModel.userList.collectAsState()
     val userEmail = MainViewModel.PrefsHelper.getSharedPreferences().getString("user_email", null)
     val curUsAuth = Constants.supabase.auth.currentUserOrNull()
@@ -91,7 +91,10 @@ fun Profile(navHost: NavHostController, viewModel: ProfileVM){
             )
         }
         val isUserLoaded by viewModel.isUserLoaded.collectAsState()
-        if (!isUserLoaded)
+        val isDataLoaded by viewModel1.isDataLoaded.collectAsState()
+        println("isUserLoaded::::: "+isUserLoaded)
+        println("isDataLoaded::::: "+isDataLoaded)
+        if (isUserLoaded == false || isDataLoaded == false)
         {
             Box(
                 modifier = Modifier
@@ -103,6 +106,8 @@ fun Profile(navHost: NavHostController, viewModel: ProfileVM){
             }
         }
         else{
+            println("зашли в отрисовку isUserLoaded::::: "+isUserLoaded)
+            println("зашли в отрисовку isDataLoaded::::: "+isDataLoaded)
             ProfileData(curUsPublic, navHost)
         }
     }
@@ -265,25 +270,33 @@ fun ProfileData(curUsPublic: Users?, navHost: NavHostController){
                 RoundedCornerShape(5)
             )
             .clickable { navHost.navigate("FavotitesOpen") }){
-            Box(modifier = Modifier.background(LightGreen, RoundedCornerShape(5.dp)).fillMaxWidth()) {
+            Box(modifier = Modifier
+                .background(LightGreen, RoundedCornerShape(5.dp))
+                .fillMaxWidth()) {
                 Icon(
                     painter = painterResource(R.drawable.fav_work),
                     contentDescription = "",
                     tint = LightBrown,
-                    modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp)
                 )
                 Text(
                     text = "Избранные работы",
                     fontSize = 16.sp,
                     color = LightBrown,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterStart).padding(start = 42.dp, top = 23.dp, bottom = 23.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 42.dp, top = 23.dp, bottom = 23.dp)
                 )
                 Icon(
                     painter = painterResource(R.drawable.forward),
                     contentDescription = "",
                     tint = LightBrown,
-                    modifier = Modifier.align(Alignment.CenterEnd).padding(end = 13.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 13.dp)
                 )
             }
         }
@@ -294,25 +307,33 @@ fun ProfileData(curUsPublic: Users?, navHost: NavHostController){
                 RoundedCornerShape(5)
             )
             .clickable { navHost.navigate("MyOpen") }){
-            Box(modifier = Modifier.background(LightGreen, RoundedCornerShape(5.dp)).fillMaxWidth()) {
+            Box(modifier = Modifier
+                .background(LightGreen, RoundedCornerShape(5.dp))
+                .fillMaxWidth()) {
                 Icon(
                     painter = painterResource(R.drawable.author),
                     contentDescription = "",
                     tint = LightBrown,
-                    modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp)
                 )
                 Text(
                     text = "Мои работы",
                     fontSize = 16.sp,
                     color = LightBrown,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterStart).padding(start = 42.dp, top = 23.dp, bottom = 23.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 42.dp, top = 23.dp, bottom = 23.dp)
                 )
                 Icon(
                     painter = painterResource(R.drawable.forward),
                     contentDescription = "",
                     tint = LightBrown,
-                    modifier = Modifier.align(Alignment.CenterEnd).padding(end = 13.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 13.dp)
                 )
             }
         }

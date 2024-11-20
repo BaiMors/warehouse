@@ -43,9 +43,9 @@ import kotlinx.serialization.json.put
 
 class MainPageViewModel: MainViewModel() {
     //var text = "я пришел из mainpageviewmodel!"
-    val _popularWorks = _worksList
+    //val _popularWorks = _worksList
     //var popularWorks: StateFlow<List<Works>> = _popularWorks
-    var popularWorks: StateFlow<List<Works>> = _popularWorks.asStateFlow()
+    //var popularWorks: StateFlow<List<Works>> = worksList
 
 /*    private fun getPopularWorks(){
         _popularWorks.value  = _worksList.value.sortedByDescending { it.likes }.take(5)
@@ -82,11 +82,13 @@ class MainPageViewModel: MainViewModel() {
             isLiked = !isLiked
         }
     }*/
+    var ic by mutableStateOf(false)
 
     fun toggleLike(workId: String, userId: String, currentIsNotLiked: Boolean) {
         viewModelScope.launch {
             if (currentIsNotLiked == false) {
                 // Удаление из избранного
+                ic = false
                 Constants.supabase.from("Favorite_works").delete {
                     select()
                     filter {
@@ -100,7 +102,9 @@ class MainPageViewModel: MainViewModel() {
                     put("workid", workId)
                 }
                 Constants.supabase.postgrest.rpc("remove_likes", jsonObject)
-            } else {
+            }
+            else {
+                ic = true
                 // Добавление в избранное
                 Constants.supabase.from("Favorite_works").insert(
                     mapOf("work" to workId, "user" to userId)
@@ -113,7 +117,7 @@ class MainPageViewModel: MainViewModel() {
                 Constants.supabase.postgrest.rpc("add_likes", jsonObject)
             }
 
-            val updatedList = _popularWorks.value.map { work ->
+/*            val updatedList = popularWorks.value.map { work ->
                 if (work.id == workId) {
                     // Логика добавления/удаления лайка и обновления поля isLiked
                     val newIsLiked = !work.isliked
@@ -123,7 +127,7 @@ class MainPageViewModel: MainViewModel() {
                     work
                 }
             }
-            _popularWorks.value = updatedList
+            popularWorks = updatedList*/
         }
     }
 
@@ -160,7 +164,7 @@ class MainPageViewModel: MainViewModel() {
     ) {
         IconButton(onClick = onLikeClick) {
             Icon(
-                painter = if (il) painterResource(R.drawable.filled) else painterResource(R.drawable.outlined),
+                painter = if (ic) painterResource(R.drawable.filled) else painterResource(R.drawable.outlined),
                 contentDescription = if (il) "Liked" else "Not Liked",
                 tint = Brown,
                 modifier = Modifier

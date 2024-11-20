@@ -70,14 +70,15 @@ import com.example.warehouse.view_models.AvtorizationVM
 import com.example.warehouse.view_models.MainPageViewModel
 import com.example.warehouse.view_models.MainViewModel
 import io.github.jan.supabase.auth.auth
+import kotlinx.coroutines.flow.collect
 import kotlinx.datetime.LocalDate
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
-    val wl by viewModel.popularWorks.collectAsState()
+fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel, viewModel1: MainViewModel) {
+    val wl by viewModel1.worksList.collectAsState()
 
     val worksList = wl.sortedByDescending { it.likes }.take(5)
     println("!!!!!!! вьюшка main page " + worksList.size)
@@ -118,14 +119,6 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                         .padding(start = 21.dp, top = 17.dp, bottom = 25.dp)
                         .align(Alignment.CenterStart)
                 )
-                /*                Icon(
-                                    painter = painterResource(R.drawable.arrow),
-                                    contentDescription = "",
-                                    tint = Brown,
-                                    modifier = Modifier
-                                        .align(Alignment.CenterEnd)
-                                        .padding(end = 21.dp, bottom = 25.dp)
-                                )*/
             }
         }
     }
@@ -134,13 +127,16 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
     if (!isDataLoaded)
     {
         Box(
-            modifier = Modifier.fillMaxSize().background(DarkGreen),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DarkGreen),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(color = LightBrown)
         }
     }
     else{
+        println("зашли в отрисовку main page, worklist.size = "+worksList.size)
         MainPageContent(navHost, worksList, viewModel)
     }
     Box {
@@ -166,7 +162,6 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     tint = Brown,
                     modifier = Modifier
                         .align(Alignment.Center)
-                    //.padding(end = 21.dp, bottom = 25.dp)
                 )
             }
             Box(modifier = Modifier
@@ -181,7 +176,6 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     tint = LightBrown,
                     modifier = Modifier
                         .align(Alignment.Center)
-                    //.padding(end = 21.dp, bottom = 25.dp)
                 )
             }
             Box(modifier = Modifier
@@ -196,7 +190,6 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     tint = LightBrown,
                     modifier = Modifier
                         .align(Alignment.Center)
-                    //.padding(end = 21.dp, bottom = 25.dp)
                 )
             }
             Box(modifier = Modifier
@@ -211,7 +204,6 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
                     tint = LightBrown,
                     modifier = Modifier
                         .align(Alignment.Center)
-                    //.padding(end = 21.dp, bottom = 25.dp)
                 )
             }
         }
@@ -220,6 +212,7 @@ fun MainPage(navHost: NavHostController, viewModel: MainPageViewModel) {
 
 @Composable
 fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewModel: MainPageViewModel){
+    var ic = viewModel.ic
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,15 +238,13 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                         ) {
                             Row(
                                 modifier = Modifier
-                                    //.width(355.dp)
                                     .padding(start = 14.dp, end = 14.dp, top = 10.dp)
                             ) {
                                 Box(modifier = Modifier.fillMaxWidth()) {
-                                    Box(modifier = Modifier.width(270.dp)
+                                    Box(modifier = Modifier
+                                        .width(270.dp)
                                         .clickable {
                                             navHost.navigate("ReadWork/${work.id}/${work.chapters!![0].id}")
-                                            //navHost.navigate("ReadWork/${work}")
-                                            //println("id главы работы на которую нажали "+work.chapters!![0].id)
                                         }) {
                                         Text(
                                             text = work.name,
@@ -268,39 +259,28 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                                 .align(Alignment.CenterStart)
                                         )
                                     }
-/*                                    Icon(
-                                        painter = painterResource(R.drawable.outlined),
-                                        contentDescription = "",
-                                        tint = Brown,
-                                        modifier = Modifier
-                                            .align(Alignment.TopEnd)
-                                            .padding(end = 12.dp, top = 15.dp)
-                                            .clickable {
-                                                if (work.isliked)
-                                            }
-                                    )*/
-                                    Box(modifier = Modifier.align(Alignment.TopEnd).padding(end = 12.dp, top = 15.dp)) {
+                                    Box(modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(end = 12.dp, top = 15.dp)) {
                                         viewModel.LikeButton(
                                             il = work.isliked,
                                             onLikeClick = {
-                                                if (work.isliked) work.isliked = false;
-                                                else work.isliked = true
+                                                if (work.isliked) { work.isliked = false; ic = false}
+                                                else {work.isliked = true; ic = true }
                                                 println("isliked ${work.isliked}");
-                                                //println("!!!curworkid = "+viewModel.currentWorkId)
-                                                viewModel.toggleLike(work.id, Constants.supabase.auth.currentUserOrNull()!!.id, work.isliked) },
-
-                                            //curid = viewModel.currentWorkId,
-                                            //workId = work.id
+                                                viewModel.toggleLike(
+                                                    work.id,
+                                                    Constants.supabase.auth.currentUserOrNull()!!.id,
+                                                    work.isliked)
+                                                //navHost.navigate("MainPage")
+                                                          },
                                         )
                                     }
                                 }
                             }
                             Row(
                                 modifier = Modifier
-                                    //.height(260.dp)
-                                    //.width(345.dp)
                                     .fillMaxWidth()
-                                    //.border(50.dp, LightGreen)
                                     .padding(start = 20.dp, end = 20.dp, top = 15.dp)
                                     .background(DarkGreen)
                                     .align(Alignment.CenterHorizontally)
@@ -372,7 +352,6 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                                 contentDescription = "",
                                                 tint = Brown,
                                                 modifier = Modifier
-                                                //.align(Alignment.CenterStart)
                                             )
                                             work.author1?.let {
                                                 Text(
@@ -394,7 +373,6 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                                 contentDescription = "",
                                                 tint = Brown,
                                                 modifier = Modifier
-                                                //.align(Alignment.CenterStart)
                                             )
                                             work.tags?.map { it.tag1?.name }?.let {
                                                 Text(
@@ -416,7 +394,6 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                                 contentDescription = "",
                                                 tint = Brown,
                                                 modifier = Modifier
-                                                //.align(Alignment.CenterStart)
                                             )
                                             Text(
                                                 text = work.status, fontSize = 12.sp, color = LightBrown,
@@ -456,7 +433,6 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                                 contentDescription = "",
                                                 tint = Brown,
                                                 modifier = Modifier
-                                                //.align(Alignment.CenterStart)
                                             )
                                             Text(
                                                 text = work.num_chapters.toString() + " глав(а)",
@@ -524,107 +500,3 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
     }
 }
 
-/*LazyColumn {
-    items(worksList) { work ->
-        work.author1?.let { Text(text = it.name, color = Color.Black) }
-    }
-}*/
-/*Text(
-            text = "Добро пожаловать на Склад",
-            fontSize = 22.sp,
-            color = LightBrown,
-            textAlign = TextAlign.Left,
-            modifier = Modifier.padding(start = 21.dp, top = 33.dp, bottom = 25.dp)
-        )
-        Box(
-            modifier = Modifier
-                .background(Brown)
-                .padding(start = 21.dp)
-                .height(1.dp)
-                .width(329.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(65.dp)
-        ) {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = "Вот что популярно сегодня",
-                    fontSize = 20.sp,
-                    color = LightBrown,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier
-                        .padding(start = 21.dp, top = 17.dp, bottom = 25.dp)
-                        .align(Alignment.CenterStart)
-                )
-                Icon(
-                    painter = painterResource(R.drawable.arrow),
-                    contentDescription = "",
-                    tint = Brown,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 21.dp)
-                )
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .background(LightGreen, shape = RoundedCornerShape(5.dp))
-                .width(355.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Row(
-                modifier = Modifier
-                    .width(355.dp)
-            ) {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Box(modifier = Modifier.width(280.dp)) {
-                        Text(
-                            text = "Название работы должно быть привязано и помещено здесь",
-                            fontSize = 19.sp,
-                            softWrap = true,
-                            lineHeight = 21.sp,
-                            textDecoration = TextDecoration.Underline,
-                            color = LightBrown,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier
-                                .padding(start = 14.dp, top = 15.dp, bottom = 13.dp)
-                                .align(Alignment.CenterStart)
-                        )
-                    }
-                    Icon(
-                        painter = painterResource(R.drawable.outlined),
-                        contentDescription = "",
-                        tint = Brown,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(end = 12.dp, top = 15.dp)
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .height(260.dp)
-                    .width(345.dp)
-                    .background(DarkGreen)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-
-            }
-            Box {
-                Text(
-                    text = "Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
-                    fontSize = 14.sp,
-                    color = LightBrown,
-                    softWrap = true,
-                    lineHeight = 20.sp,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier
-                        .padding(start = 14.dp, top = 17.dp, bottom = 7.dp, end = 14.dp)
-                        .align(Alignment.CenterStart)
-                )
-            }
-        }*/

@@ -61,7 +61,6 @@ open class MainViewModel : ViewModel() {
 
     var isLiked by mutableStateOf(false)
     //var currentWorkId by mutableStateOf(mutableListOf(""))
-    var ic by mutableStateOf(R.drawable.outlined)
 
     val _worksList = MutableStateFlow<List<Works>>(emptyList())
     var worksList: StateFlow<List<Works>> = _worksList
@@ -94,6 +93,7 @@ open class MainViewModel : ViewModel() {
                 }
             }
         }*/
+
 
 
     fun loadWorks() {
@@ -132,10 +132,12 @@ open class MainViewModel : ViewModel() {
                     work.gallery = galleryFromDb.filter { it.work == work.id }
                     work.chapters = chaptersFromDb.filter { it.work == work.id }
                     val fv = favworksFromDb.filter { it.work == work.id && it.user == Constants.supabase.auth.currentUserOrNull()!!.id }
+                    val fv2 = favworksFromDb.filter { it.work == work.id }
+                    work.userLiked = fv2
                     work.isliked = fv.isNotEmpty()
                     work
                 }
-                println("количество глав ай синк?? " + _worksList.value[0].chapters!![0].name)
+                //println("название главы?? " + _worksList.value[0].chapters!![0].name)
                 _isDataLoaded.value = true
             } catch (e: Exception) {
                 Log.e("MainPageViewModel", "Error fetching data: ${e.localizedMessage}")

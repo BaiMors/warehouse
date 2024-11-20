@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.warehouse.models.Chapters
 import com.example.warehouse.models.Fandoms
+import com.example.warehouse.models.Favorite_works
 import com.example.warehouse.models.Gallery
 import com.example.warehouse.models.Tags
 import com.example.warehouse.models.Users
@@ -28,14 +29,14 @@ class ProfileVM:MainViewModel(){
             try {
                 val authorsFromDb = Constants.supabase.from("Users").select().decodeList<Users>()
                 println("получили лист юзеров")
-                val favworksFromDb = Constants.supabase.from("Favorite_works").select().decodeList<Works>()
+                val favworksFromDb = Constants.supabase.from("Favorite_works").select().decodeList<Favorite_works>()
                 println("получили лист любимых работ")
                 println("загрузились ли данные о работах "+_isDataLoaded.value)
                 //if (_isDataLoaded.value)
                 //{
                     _userList.value = authorsFromDb.map { formap ->
                         val mv = _worksList.value.filter { it.author == formap.id }
-                        val fv = favworksFromDb.filter { it.author == formap.id }
+                        val fv = _worksList.value.filter { it.id == formap.id }
                         formap.my_works = mv
                         println("получили свои работы")
                         formap.fav_works = fv

@@ -30,6 +30,7 @@ class CatalogueVM:MainViewModel() {
                 _listFandoms.value = Constants.supabase.from("Fandoms").select().decodeList<Fandoms>().sortedBy { it.name }
                 _listTags.value = Constants.supabase.from("Tags").select().decodeList<Tags>().sortedBy { it.name }
                 _listAuthors.value = Constants.supabase.postgrest.rpc("my_users").decodeList<Users>().sortedBy { it.name }
+                //_listAuthors.value = Constants.supabase.from("Users").select().decodeList<Users>().sortedBy { it.name }
             }
             catch (e: Exception){
                 Log.e("MainPageViewModel", "Error fetching data: ${e.localizedMessage}")
