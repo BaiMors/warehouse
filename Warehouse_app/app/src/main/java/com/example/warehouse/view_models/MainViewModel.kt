@@ -135,10 +135,10 @@ open class MainViewModel : ViewModel() {
                     work.tags = wtFromDb.filter { it.work == work.id }
                     work.gallery = galleryFromDb.filter { it.work == work.id }
                     work.chapters = chaptersFromDb.filter { it.work == work.id }
-                    val fv = favworksFromDb.filter { it.work == work.id && it.user == Constants.supabase.auth.currentUserOrNull()!!.id }
+                    //val fv = favworksFromDb.filter { it.user == Constants.supabase.auth.currentUserOrNull()!!.id }
                     val fv2 = favworksFromDb.filter { it.work == work.id }
                     work.userLiked = fv2
-                    work.isliked = fv.isNotEmpty()
+                    work.isliked = fv2.isNotEmpty()
                     work
                 }
                 //println("название главы?? " + _worksList.value[0].chapters!![0].name)
@@ -163,7 +163,7 @@ open class MainViewModel : ViewModel() {
 
         if (isDataLoaded.value){
             viewModelScope.launch {
-                delay(5000)
+                /*delay(5000)
                 val fw = Constants.supabase.from("Favorite_works").select()
                     .decodeList<Favorite_works>().filter { it.user == Constants.supabase.auth.currentUserOrNull()!!.id }
                 val result = Constants.supabase.from("Favorite_works").select(Columns.raw("work")).decodeList<String>()
@@ -171,7 +171,7 @@ open class MainViewModel : ViewModel() {
                 for (id in fw){
                     likedStates[id.work] = true
                 }
-                println("из вьюмодели - размер likedstates"+likedStates.size)
+                println("из вьюмодели - размер likedstates"+likedStates.size)*/
                 /*            if (fw.isNotEmpty()){
                                 for (id in result){
                                     likedStates[id] = true

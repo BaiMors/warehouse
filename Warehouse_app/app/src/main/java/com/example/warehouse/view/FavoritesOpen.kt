@@ -53,7 +53,7 @@ import io.github.jan.supabase.auth.auth
 @Composable
 fun FavotitesOpen(navHost: NavHostController, viewModel: MainViewModel, viewModel1: ProfileVM){
     val fw by viewModel.worksList.collectAsState()
-    val favWorks = fw
+    val favWorks = fw.filter { it.userLiked!!.find { it.user == Constants.supabase.auth.currentUserOrNull()!!.id } != null }
 /*    val favWorks = fw.filter { work ->
         work.isliked = true
         work.userLiked = work.userLiked!!.filter { it.user == Constants.supabase.auth.currentUserOrNull()!!.id }
@@ -78,7 +78,7 @@ fun FavotitesOpen(navHost: NavHostController, viewModel: MainViewModel, viewMode
                 )
             }
             Text(
-                text = "Мои работы",
+                text = "Избранные работы",
                 fontSize = 20.sp,
                 color = Brown,
                 textAlign = TextAlign.Left,
@@ -228,7 +228,7 @@ fun FavOpenContent(navHost: NavHostController, favWorks: List<Works>){
                                         )
                                     }
                                     Icon(
-                                        painter = painterResource(R.drawable.author),
+                                        painter = painterResource(R.drawable.filled),
                                         contentDescription = "",
                                         tint = Brown,
                                         modifier = Modifier
@@ -320,7 +320,7 @@ fun FavOpenContent(navHost: NavHostController, favWorks: List<Works>){
                                             )
                                             work.author1?.let {
                                                 Text(
-                                                    text = it.name,
+                                                    text = it.name!!,
                                                     fontSize = 12.sp,
                                                     color = LightBrown,
                                                     modifier = Modifier

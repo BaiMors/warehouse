@@ -229,7 +229,7 @@ fun CategoryOpen(navHost: NavHostController, viewModel: CatalogueVM, category: S
                                             )
                                             work.author1?.let {
                                                 Text(
-                                                    text = it.name, fontSize = 12.sp, color = LightBrown,
+                                                    text = it.name!!, fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),

@@ -24,6 +24,13 @@ class ProfileVM:MainViewModel(){
     val _isUserLoaded = MutableStateFlow(false)
     val isUserLoaded: StateFlow<Boolean> = _isUserLoaded
 
+/*    //region View State
+    private val _albumViewState: MutableStateFlow<Users> = MutableStateFlow(Users())
+    // exposes the ViewState to the composable view
+    val viewStateFlow: StateFlow<Users>
+        get() = _albumViewState
+    // endregion*/
+
     fun loadUsers(){
         viewModelScope.launch {
             try {

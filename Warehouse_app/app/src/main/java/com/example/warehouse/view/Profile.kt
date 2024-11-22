@@ -191,7 +191,7 @@ fun Profile(navHost: NavHostController, viewModel: ProfileVM, viewModel1: MainVi
 fun ProfileData(curUsPublic: Users?, navHost: NavHostController){
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(25.dp))
-        Box{
+        Box(modifier = Modifier.fillMaxWidth()){
             if (curUsPublic?.image.isNullOrEmpty())
             {
                 Canvas(
@@ -206,15 +206,17 @@ fun ProfileData(curUsPublic: Users?, navHost: NavHostController){
                     )
                 }
             }
-            AsyncImage(
-                model = curUsPublic?.image,
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(128.dp)
-                    .width(128.dp),
-                contentScale = ContentScale.Crop
-            )
+            else{
+                AsyncImage(
+                    model = curUsPublic?.image,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .height(128.dp)
+                        .width(128.dp).clip(RoundedCornerShape(100)),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
         Text(
             text = curUsPublic!!.name,

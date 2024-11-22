@@ -366,7 +366,7 @@ fun MainPageContent(navHost: NavHostController, worksList: List<Works>, viewMode
                                             )
                                             work.author1?.let {
                                                 Text(
-                                                    text = it.name, fontSize = 12.sp, color = LightBrown,
+                                                    text = it.name!!, fontSize = 12.sp, color = LightBrown,
                                                     modifier = Modifier
                                                         .align(CenterEnd)
                                                         .padding(start = 30.dp),

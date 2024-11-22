@@ -210,7 +210,7 @@ fun CatalogueOpen(navHost: NavHostController, viewModel: CatalogueVM, category: 
                                                     )
                                                     item.author1?.let {
                                                         Text(
-                                                            text = it.name, fontSize = 12.sp, color = LightBrown,
+                                                            text = it.name!!, fontSize = 12.sp, color = LightBrown,
                                                             modifier = Modifier
                                                                 .align(CenterEnd)
                                                                 .padding(start = 30.dp),
@@ -376,7 +376,7 @@ fun CatalogueOpen(navHost: NavHostController, viewModel: CatalogueVM, category: 
 
                         is Users -> {
                             Text(
-                                text = item.name,
+                                text = item.name!!,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(top = 20.dp, start = 30.dp)
                                     .clickable { navHost.navigate("CategoryOpen/${"Авторы"}/${item.name}") },

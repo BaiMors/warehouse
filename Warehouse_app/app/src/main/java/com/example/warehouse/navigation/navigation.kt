@@ -47,7 +47,7 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
 
     val navController = rememberNavController()
     NavHost(navController = navController,
-        startDestination = "Intro")
+        startDestination = "UpdateProfile")
     {
         composable("Intro"){
             Intro(navController, viewModel)
@@ -104,7 +104,7 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
             Profile(navController, ProfileVM(), MainViewModel())
         }
         composable("UpdateProfile"){
-            UpdateProfile()
+            UpdateProfile(navController, ProfileVM(), MainViewModel())
         }
         composable("FavotitesOpen"){
             FavotitesOpen(navController, MainViewModel(), ProfileVM())

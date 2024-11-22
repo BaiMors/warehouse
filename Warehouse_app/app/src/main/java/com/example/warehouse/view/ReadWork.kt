@@ -116,7 +116,7 @@ fun ReadSelectedWork(navHost: NavHostController, SelectedWork: Works, chapter: S
                         .align(Alignment.CenterStart)
                         .padding(start = 21.dp, end = 21.dp, bottom = 25.dp, top = 45.dp)
                         .clickable { navHost.navigateUp() }
-                )//сн
+                )
                 Icon(
                     painter = painterResource(R.drawable.outlined),
                     contentDescription = "",
