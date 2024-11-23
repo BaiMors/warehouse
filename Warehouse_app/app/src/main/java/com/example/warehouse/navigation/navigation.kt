@@ -47,7 +47,7 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
 
     val navController = rememberNavController()
     NavHost(navController = navController,
-        startDestination = "UpdateProfile")
+        startDestination = "Intro")
     {
         composable("Intro"){
             Intro(navController, viewModel)

@@ -15,20 +15,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.example.warehouse.R
+import com.example.warehouse.service.Constants
 import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.view_models.MainViewModel
+import io.github.jan.supabase.storage.storage
+import io.github.jan.supabase.storage.upload
 import kotlinx.coroutines.delay
 
 @Composable
 fun Intro(navHost: NavHostController, viewModel: MainViewModel){
+    val ctx = LocalContext.current
     LaunchedEffect(Unit) {
         // Задержка на 2 секунды
         delay(100)
@@ -39,21 +45,24 @@ fun Intro(navHost: NavHostController, viewModel: MainViewModel){
         //val userEmail = sharedPreferences.getString("user_email", null)
         val userEmail = MainViewModel.PrefsHelper.getSharedPreferences().getString("user_email", null)
 
+
         if (userEmail != null) {
             // Перейти к главному экрану
             viewModel.loadWorks()
-            navHost.navigate("MainPage"){
+            navHost.navigate("MainPage") {
                 popUpTo("Intro") { inclusive = true }
             }
         } else {
             // Показать экран авторизации
-            navHost.navigate("Avtorization"){
+            navHost.navigate("Avtorization") {
                 popUpTo("Intro") { inclusive = true }
             }
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(DarkGreen)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(DarkGreen)) {
         Row(modifier = Modifier.align(Alignment.Center)) {
             Icon(
                 painter = painterResource(R.drawable.home_avt),

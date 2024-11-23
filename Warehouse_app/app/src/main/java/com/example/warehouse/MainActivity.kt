@@ -1,6 +1,9 @@
 package com.example.warehouse
 
+import android.Manifest
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,12 +19,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.warehouse.navigation.Navigation
 import com.example.warehouse.ui.theme.WarehouseTheme
 import com.example.warehouse.view_models.MainViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
+
+    companion object {
+        const val REQUEST_CODE = 1001  // Можно выбрать любое уникальное значение
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

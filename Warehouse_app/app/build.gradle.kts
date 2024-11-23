@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.warehouse"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -66,10 +66,11 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:postgrest-kt") //для поддержки постгри
     implementation("io.github.jan-tennert.supabase:auth-kt") //для встр авторизации супабейз
     implementation("io.github.jan-tennert.supabase:realtime-kt") //для рилтайма в таблицах супабейз
+    implementation("io.github.jan-tennert.supabase:storage-kt:3.0.2") //для storage
 
     implementation("io.ktor:ktor-client-android:3.0.0") //для подключения
 
-    implementation("io.coil-kt:coil-compose:2.2.2")//для отрисовки картинок
+    implementation("io.coil-kt:coil-compose:2.4.0")//для отрисовки картинок
 
     implementation(libs.androidx.ui.text.google.fonts) //для гугл шрифтов
     implementation(libs.androidx.core.ktx)
