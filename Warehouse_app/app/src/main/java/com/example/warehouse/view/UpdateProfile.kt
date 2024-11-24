@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +14,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,12 +32,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,13 +52,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.net.toUri
@@ -67,6 +79,7 @@ import com.example.warehouse.models.Users
 import com.example.warehouse.service.Constants
 import com.example.warehouse.service.ContentUriFetcher
 import com.example.warehouse.service.UploadOptions
+import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.view_models.MainViewModel
@@ -96,7 +109,9 @@ fun UpdateProfile(navHost: NavHostController, viewModel: ProfileVM, viewModel1: 
 
     Box(
         Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
+            .zIndex(1f)
+            .background(DarkGreen)
             .padding(bottom = 20.dp)
     ) {
         Icon(
@@ -104,8 +119,8 @@ fun UpdateProfile(navHost: NavHostController, viewModel: ProfileVM, viewModel1: 
             contentDescription = "",
             tint = LightBrown,
             modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 21.dp, end = 21.dp, bottom = 25.dp, top = 45.dp).zIndex(1f)
+                .align(Alignment.TopStart)
+                .padding(start = 21.dp, end = 21.dp, bottom = 25.dp, top = 45.dp)
                 .clickable { navHost.navigateUp() }
         )
         if (isUserLoaded == false || isDataLoaded == false)
@@ -120,8 +135,8 @@ fun UpdateProfile(navHost: NavHostController, viewModel: ProfileVM, viewModel1: 
             }
         }
         else{
-            println("зашли в отрисовку UpdateProfileData::::: "+isUserLoaded)
-            println("зашли в отрисовку UpdateProfileData::::: "+isDataLoaded)
+            println("зашли в отрисовку isUserLoaded::::: "+isUserLoaded)
+            println("зашли в отрисовку isDataLoaded::::: "+isDataLoaded)
             UpdateProfileData(navHost, viewModel, viewModel1, selectedImage)
         }
     }
@@ -132,24 +147,35 @@ fun UpdateProfileData(navHost: NavHostController, viewModel: ProfileVM, viewMode
     val ud = viewModel.userList.collectAsState()
     println("ща найду userData")
     val userData = ud.value.find { it.id == Constants.supabase.auth.currentUserOrNull()!!.id }
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val name = remember { mutableStateOf("") }
+    val username = remember { mutableStateOf("") }
+    val desc = remember { mutableStateOf("") }
+    val upsertResult by viewModel.upsertResult.collectAsState()
+    val ctx = LocalContext.current
 
+/*    email.value = Constants.supabase.auth.currentUserOrNull()!!.email!!
+    name.value = userData!!.name
+    username.value = userData!!.username
+    desc.value == userData!!.description*/
 
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(DarkGreen)
+            //.background(DarkGreen)
             .padding(top = 80.dp)
             .imePadding()
             .verticalScroll(rememberScrollState())
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            //if (userData!!.image == null)
-            val im = MainViewModel.PrefsHelper.getSharedPreferences().getString("im", null)
-            if (im == null)
+            if (userData!!.image == null)
+            //val im = MainViewModel.PrefsHelper.getSharedPreferences().getString("im", null)
+            //if (im == null)
             {
-                println("im равно нуллу")
+                //println("im равно нуллу")
                 Canvas(
                     Modifier
                         .size(128.dp)
@@ -160,34 +186,269 @@ fun UpdateProfileData(navHost: NavHostController, viewModel: ProfileVM, viewMode
                         center = center,
                     )
                 }
-                PhotoSelectorView(selectedImage)
+                //PhotoSelectorView(selectedImage)
             }
             else
             {
-                //println("я зашел в отрисовку картинки и вот чему равен uri:"+"content://media/picker/0/com.android.providers.media.photopicker/media/1000000397".toUri())
-                Image(
-                    painter = rememberAsyncImagePainter(model = "content://media/picker/0/com.android.providers.media.photopicker/media/1000000544".toUri()),
+                AsyncImage(
+                    model = userData.image,
                     contentDescription = "",
                     modifier = Modifier
                         .align(Alignment.Center)
                         .height(128.dp)
-                        .width(128.dp).clip(RoundedCornerShape(100)),
+                        .width(128.dp).clip(CircleShape),
                     contentScale = ContentScale.Crop,
-                    //imageLoader = imageLoader
                 )
                 //PhotoSelectorView()
-                val buf = MainViewModel.PrefsHelper.getSharedPreferences().getString("im", null)
-                ImageLayoutView(buf!!)
+                //val buf = MainViewModel.PrefsHelper.getSharedPreferences().getString("im", null)
+                //ImageLayoutView(buf!!)
+            }
+        }
+
+        //
+        Column(
+            modifier = Modifier.padding(bottom = 20.dp).align(Alignment.CenterHorizontally),
+        ) {
+            Text(
+                "Имя",
+                color = LightBrown,
+                fontWeight = FontWeight.Bold
+            )
+            TextField(
+                value = name.value,
+                textStyle = TextStyle(fontSize = 15.sp),
+                onValueChange = { newText -> name.value = newText },
+                maxLines = 1,
+                placeholder = {
+                    Text(
+                        text = userData!!.name,
+                        color = Brown.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                shape = RoundedCornerShape(3.dp),
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .width(300.dp)
+                    .height(55.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = LightBrown,
+                    focusedContainerColor = LightBrown,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen
+                )
+            )
+
+            Text(
+                "Имя пользователя",
+                color = LightBrown,
+                fontWeight = FontWeight.Bold
+            )
+            TextField(
+                value = username.value,
+                textStyle = TextStyle(fontSize = 15.sp),
+                onValueChange = { newText -> username.value = newText },
+                maxLines = 1,
+                placeholder = {
+                    Text(
+                        text = "@"+userData!!.username,
+                        color = Brown.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                shape = RoundedCornerShape(3.dp),
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .width(300.dp)
+                    .height(55.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = LightBrown,
+                    focusedContainerColor = LightBrown,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen
+                )
+            )
+
+            Text(
+                "Описание",
+                color = LightBrown,
+                fontWeight = FontWeight.Bold
+            )
+            TextField(
+                value = desc.value,
+                textStyle = TextStyle(fontSize = 15.sp),
+                onValueChange = { newText -> desc.value = newText },
+                maxLines = Int.MAX_VALUE,
+                placeholder = {
+                    Text(
+                        text = userData!!.description!!,
+                        color = Brown.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                shape = RoundedCornerShape(3.dp),
+                modifier = Modifier
+                    .height(126.dp)
+                    .width(300.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = LightBrown,
+                    focusedContainerColor = LightBrown,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen
+                )
+            )
+
+            Canvas(
+                Modifier
+                    .width(128.dp)
+                    .padding(top = 23.dp, start = 21.dp, end = 21.dp, bottom = 23.dp)
+                    .height(1.dp)
+                    .background(Color.Transparent)
+                    .align(Alignment.CenterHorizontally)) {
+                drawLine(
+                    color = LightBrown.copy(0.5f),
+                    start = Offset(0f, size.height / 2),
+                    end = Offset(size.width, size.height / 2),
+                    strokeWidth = size.height
+                )
+            }
+
+            Text(
+                "Логин",
+                color = LightBrown,
+                fontWeight = FontWeight.Bold
+            )
+            TextField(
+                value = email.value,
+                textStyle = TextStyle(fontSize = 15.sp),
+                onValueChange = { newText -> email.value = newText },
+                maxLines = 1,
+                placeholder = {
+                    Text(
+                        text = Constants.supabase.auth.currentUserOrNull()!!.email!!,
+                        color = Brown.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                shape = RoundedCornerShape(3.dp),
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .width(300.dp)
+                    .height(55.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = LightBrown,
+                    focusedContainerColor = LightBrown,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen
+                )
+            )
+
+            var passwordVisibility: Boolean by remember { mutableStateOf(false) }
+            Text(
+                "Пароль",
+                color = LightBrown,
+                fontWeight = FontWeight.Bold
+            )
+            TextField(
+                value = password.value,
+                textStyle = TextStyle(fontSize = 15.sp),
+                onValueChange = { newText -> password.value = newText },
+                maxLines = 1,
+                placeholder = {
+                    Text(
+                        text = "123456",
+                        color = Brown.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                shape = RoundedCornerShape(3.dp),
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .width(300.dp)
+                    .height(55.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = LightBrown,
+                    focusedContainerColor = LightBrown,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen
+                )
+            )
+        }
+
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Button(
+                modifier = Modifier
+                    .width(270.dp)
+                    .height(70.dp)
+                    .padding(top = 20.dp)
+                    .align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(Brown),
+                shape = RoundedCornerShape(3.dp),
+                onClick = {
+                    println("name.value:::::::::"+name.value.isEmpty())
+                    viewModel.updateUserProfile(
+                        ctx,
+                        if (name.value.isEmpty()) userData!!.name else name.value,
+                        //"Bai",
+                        if (username.value.isEmpty()) userData!!.username else username.value,
+                        //"y_k_e_s",
+                        if (email.value.isEmpty()) Constants.supabase.auth.currentUserOrNull()!!.email else email.value,
+                        //"ardaismine@gmail.com",
+                        password.value,
+                        if (desc.value.isEmpty()) userData!!.description else desc.value,
+                        //"Standing next to you~",
+                        userData!!.title,
+                        //"https://i.pinimg.com/736x/ee/0b/05/ee0b05853406d693856978f7b4cbf1b4.jpg"
+                        userData!!.image
+                    )
+                    navHost.navigate("Profile")
+                }) {
+                Text(
+                    "Сохранить изменения",
+                    fontSize = 20.sp,
+                    color = LightBrown,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
-
+    when (upsertResult) {
+        is ProfileVM.Result.Success -> {
+            //navHost.navigate("Profile")
+            Toast.makeText(ctx, "Данные успешно обновлены", Toast.LENGTH_SHORT).show()
+            //navHost.navigate("Profile")
+        }
+        is ProfileVM.Result.Error -> {
+            Toast.makeText(ctx, "Error: ${(upsertResult as ProfileVM.Result.Error).message}", Toast.LENGTH_SHORT).show()
+        }
+        null -> {
+            // Ожидание результата, ничего не делаем
+        }
+    }
 }
 
 
 
 
-@Composable
+/*@Composable
 fun PhotoSelectorView(selectedImage: String?) {
     //val ctx = LocalContext.current
     //var uploadedImageUrl by remember { mutableStateOf<String?>(null) } // Хранит URL загруженного изображения
@@ -231,7 +492,7 @@ fun ImageLayoutView(selectedImage: String?) {
             contentScale = ContentScale.Crop
         )
     }
-}
+}*/
 
 /*fun uriToByteArray(context: Context, uri: Uri): ByteArray? {
     return try {

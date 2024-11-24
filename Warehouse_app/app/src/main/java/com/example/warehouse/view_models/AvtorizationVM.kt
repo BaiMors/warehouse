@@ -1,6 +1,8 @@
 package com.example.warehouse.view_models
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.warehouse.models.Users
@@ -28,7 +30,7 @@ class AvtorizationVM:ViewModel(){
     val RegResult: StateFlow<Result?> = _regResult
 
 
-    fun onSignInEmailPassword(emailUser: String, passwordUser: String) {
+    fun onSignInEmailPassword(ctx: Context, emailUser: String, passwordUser: String) {
         viewModelScope.launch {
             try {
                 val user = Constants.supabase.auth.signInWith(Email) {
@@ -38,15 +40,17 @@ class AvtorizationVM:ViewModel(){
                 println(user.toString())
                 println(Constants.supabase.auth.currentUserOrNull()!!.id)
                 println("Success authorization")
+                Toast.makeText(ctx, "Успешная авторизация", Toast.LENGTH_SHORT).show()
                 _authResult.value = Result.Success(user)
             } catch (e: Exception) {
                 println("Error")
                 println(e.message.toString())
+                Toast.makeText(ctx, "Ошибка: ${e.message.toString()}", Toast.LENGTH_SHORT).show()
                 _authResult.value = Result.Error(e.message.toString())  // Ошибка входа
             }
         }
     }
-    fun onSignUpEmail(emailUser: String, passwordUser: String, name: String, username: String, description: String) {
+    fun onSignUpEmail(ctx: Context, emailUser: String, passwordUser: String, name: String, username: String, description: String) {
         viewModelScope.launch {
             try{
                 val userAuth =  Constants.supabase.auth.signUpWith(Email) {
@@ -68,12 +72,14 @@ class AvtorizationVM:ViewModel(){
                 //println(userPublic.toString())
                 println(Constants.supabase.auth.currentUserOrNull()!!.id)
                 println("Success registration")
+                Toast.makeText(ctx, "Успешная регистрация", Toast.LENGTH_SHORT).show()
                 _regResult.value = Result.Success(user = userPublic!!)
             }
             catch (e: Exception) {
                 println("Error")
                 println(Constants.supabase.auth.currentUserOrNull()!!.id)
                 println(e.message.toString())
+                Toast.makeText(ctx, "Ошибка: ${e.message.toString()}", Toast.LENGTH_SHORT).show()
                 _regResult.value = Result.Error(e.message.toString())
             }
 

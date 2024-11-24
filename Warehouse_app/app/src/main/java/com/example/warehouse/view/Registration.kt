@@ -156,7 +156,7 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
                 maxLines = 1,
                 placeholder = {
                     Text(
-                        text = "12345",
+                        text = "123456",
                         color = Brown.copy(alpha = 0.5f),
                         fontWeight = FontWeight.Bold
                     )
@@ -287,7 +287,7 @@ fun Registration(navHost: NavHostController, viewModel: AvtorizationVM) {
                 colors = ButtonDefaults.buttonColors(Brown),
                 shape = RoundedCornerShape(3.dp),
                 onClick = {
-                    viewModel.onSignUpEmail(email.value, password.value, name.value, username.value, desc.value)
+                    viewModel.onSignUpEmail(ctx, email.value, password.value, name.value, username.value, desc.value)
                 }) {
                 Text(
                     "Зарегистрироваться",

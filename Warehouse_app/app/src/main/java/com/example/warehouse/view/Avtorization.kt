@@ -32,7 +32,10 @@ import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.view_models.AvtorizationVM
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -70,6 +73,8 @@ fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(DarkGreen)
+            .imePadding()
+            .verticalScroll(rememberScrollState())
             .padding(top = 100.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
@@ -161,7 +166,7 @@ fun Avtorization(navHost: NavHostController, viewModel: AvtorizationVM) {
                 colors = ButtonDefaults.buttonColors(Brown),
                 shape = RoundedCornerShape(3.dp),
                 onClick = {
-                    viewModel.onSignInEmailPassword(email.value, password.value)
+                    viewModel.onSignInEmailPassword(ctx, email.value, password.value)
                 }) {
                 Text(
                     "Войти",

@@ -226,7 +226,7 @@ fun MyOpenContent(navHost: NavHostController, myWorks: List<Works>){
                                         )
                                     }
                                     Icon(
-                                        painter = painterResource(R.drawable.author),
+                                        painter = painterResource(R.drawable.author_big),
                                         contentDescription = "",
                                         tint = Brown,
                                         modifier = Modifier
@@ -313,7 +313,7 @@ fun MyOpenContent(navHost: NavHostController, myWorks: List<Works>){
                                                 painter = painterResource(R.drawable.author),
                                                 contentDescription = "",
                                                 tint = Brown,
-                                                modifier = Modifier
+                                                modifier = Modifier.width(40.dp).height(40.dp)
                                                 //.align(Alignment.CenterStart)
                                             )
                                             work.author1?.let {
