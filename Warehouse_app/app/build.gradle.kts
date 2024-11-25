@@ -72,6 +72,10 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.4.0")//для отрисовки картинок
 
+    implementation ("androidx.compose.material3:material3:1.3.1")
+    implementation ("com.google.accompanist:accompanist-flowlayout:0.36.0")
+
+
     implementation(libs.androidx.ui.text.google.fonts) //для гугл шрифтов
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
