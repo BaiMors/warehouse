@@ -28,8 +28,6 @@ import com.example.warehouse.ui.theme.Brown
 import com.example.warehouse.ui.theme.DarkGreen
 import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.view_models.MainViewModel
-import io.github.jan.supabase.storage.storage
-import io.github.jan.supabase.storage.upload
 import kotlinx.coroutines.delay
 
 @Composable

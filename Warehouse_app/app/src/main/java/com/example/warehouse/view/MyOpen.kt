@@ -232,6 +232,7 @@ fun MyOpenContent(navHost: NavHostController, myWorks: List<Works>){
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .padding(end = 12.dp, top = 15.dp)
+                                            .clickable { navHost.navigate("CreateEditWork/${work.id}") }
                                     )
                                 }
                             }
@@ -313,7 +314,7 @@ fun MyOpenContent(navHost: NavHostController, myWorks: List<Works>){
                                                 painter = painterResource(R.drawable.author),
                                                 contentDescription = "",
                                                 tint = Brown,
-                                                modifier = Modifier.width(40.dp).height(40.dp)
+                                                modifier = Modifier
                                                 //.align(Alignment.CenterStart)
                                             )
                                             work.author1?.let {

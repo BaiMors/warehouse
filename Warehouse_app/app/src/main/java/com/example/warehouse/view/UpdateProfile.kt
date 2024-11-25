@@ -85,8 +85,6 @@ import com.example.warehouse.ui.theme.LightBrown
 import com.example.warehouse.view_models.MainViewModel
 import com.example.warehouse.view_models.ProfileVM
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.storage.UploadOptionBuilder
-import io.github.jan.supabase.storage.storage
 import io.ktor.http.ContentDisposition.Companion.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

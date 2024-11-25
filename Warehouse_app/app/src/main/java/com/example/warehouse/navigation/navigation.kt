@@ -12,6 +12,7 @@ import com.example.warehouse.view.Avtorization
 import com.example.warehouse.view.Catalogue
 import com.example.warehouse.view.CatalogueOpen
 import com.example.warehouse.view.CategoryOpen
+import com.example.warehouse.view.CreateEditWork
 import com.example.warehouse.view.FavotitesOpen
 import com.example.warehouse.view.Intro
 import com.example.warehouse.view.MainPage
@@ -24,6 +25,7 @@ import com.example.warehouse.view.SearchOpen
 import com.example.warehouse.view.UpdateProfile
 import com.example.warehouse.view_models.AvtorizationVM
 import com.example.warehouse.view_models.CatalogueVM
+import com.example.warehouse.view_models.CreateEditWorkVM
 import com.example.warehouse.view_models.MainPageViewModel
 import com.example.warehouse.view_models.MainViewModel
 import com.example.warehouse.view_models.ProfileVM
@@ -47,7 +49,7 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
 
     val navController = rememberNavController()
     NavHost(navController = navController,
-        startDestination = "Profile")
+        startDestination = "MyOpen")
     {
         composable("Intro"){
             Intro(navController, viewModel)
@@ -111,6 +113,17 @@ fun Navigation(viewModel: MainViewModel, context: Context) {
         }
         composable("MyOpen"){
             MyOpen(navController, MainViewModel(), ProfileVM())
+        }
+        composable(
+            "CreateEditWork/{work}",
+            //"ReadWork/{work}",
+            arguments = listOf(
+                navArgument(name = "work"){
+                    type = NavType.StringType
+                }
+            )
+        ){backStackEntry ->
+            CreateEditWork(navController, CreateEditWorkVM(), backStackEntry.arguments?.getString("work"))
         }
         composable(
             "ReadWork/{work}/{chapter}",
