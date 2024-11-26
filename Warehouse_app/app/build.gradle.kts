@@ -74,6 +74,8 @@ dependencies {
 
     implementation ("androidx.compose.material3:material3:1.3.1")
     implementation ("com.google.accompanist:accompanist-flowlayout:0.36.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    implementation("org.slf4j:slf4j-simple:2.0.9")
 
 
     implementation(libs.androidx.ui.text.google.fonts) //для гугл шрифтов

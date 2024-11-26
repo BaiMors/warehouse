@@ -1,6 +1,7 @@
 package com.example.warehouse
 
 import android.Manifest
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
@@ -28,8 +29,10 @@ import com.example.warehouse.view_models.MainViewModel
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
+    lateinit var sharedPreferences: SharedPreferences
+
     companion object {
-        const val REQUEST_CODE = 1001  // Можно выбрать любое уникальное значение
+        const val REQUEST_CODE = 1001
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //sharedPreferences = getSharedPreferences("user_email", Context.MODE_PRIVATE)
                     MainViewModel.PrefsHelper.init(this)
                     Navigation(viewModel, LocalContext.current)
                 }

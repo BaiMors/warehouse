@@ -34,7 +34,7 @@ import kotlinx.coroutines.delay
 fun Intro(navHost: NavHostController, viewModel: MainViewModel){
     val ctx = LocalContext.current
     LaunchedEffect(Unit) {
-        // Задержка на 2 секунды
+        //
         delay(100)
         //
 /*        val editor = MainViewModel.PrefsHelper.getSharedPreferences().edit()
@@ -56,7 +56,7 @@ fun Intro(navHost: NavHostController, viewModel: MainViewModel){
                 popUpTo("Intro") { inclusive = true }
             }
         }
-    }
+    }//к
 
     Box(modifier = Modifier
         .fillMaxSize()

@@ -17,16 +17,16 @@ import kotlinx.coroutines.launch
 class AvtorizationVM:ViewModel(){
     //val sp: SharedPreferences? = null
 
-    sealed class Result {
+    public sealed class Result {
         data class Success(val user: Any) : Result()  // Успех
         data class Error(val message: String) : Result()  // Ошибка
     }
 
     // Состояние для результата авторизации
-    private val _authResult = MutableStateFlow<Result?>(null)
+    val _authResult = MutableStateFlow<Result?>(null)
     val AuthResult: StateFlow<Result?> = _authResult
 
-    private val _regResult = MutableStateFlow<Result?>(null)
+    val _regResult = MutableStateFlow<Result?>(null)
     val RegResult: StateFlow<Result?> = _regResult
 
 
