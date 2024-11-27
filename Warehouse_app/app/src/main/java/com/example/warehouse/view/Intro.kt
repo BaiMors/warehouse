@@ -35,7 +35,7 @@ fun Intro(navHost: NavHostController, viewModel: MainViewModel){
     val ctx = LocalContext.current
     LaunchedEffect(Unit) {
         //
-        delay(100)
+        delay(2000)
         //
 /*        val editor = MainViewModel.PrefsHelper.getSharedPreferences().edit()
         editor.clear().apply()*/

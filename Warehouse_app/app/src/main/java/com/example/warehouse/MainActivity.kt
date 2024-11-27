@@ -1,6 +1,7 @@
 package com.example.warehouse
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -10,6 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.warehouse.navigation.Navigation
 import com.example.warehouse.ui.theme.WarehouseTheme
 import com.example.warehouse.view_models.MainViewModel
@@ -38,6 +42,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        hideSystemUI()
         setContent {
             WarehouseTheme {
                 Surface(
@@ -50,5 +55,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    @SuppressLint("WrongConstant")
+    fun ComponentActivity.hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(android.view.WindowInsets.Type.systemBars())
     }
 }

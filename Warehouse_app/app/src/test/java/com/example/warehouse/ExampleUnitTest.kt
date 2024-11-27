@@ -64,10 +64,8 @@ class ExampleUnitTest {
         val viewModel1 = AvtorizationVM()
         val mockError = Exception("Failed to sign in")
 
-        // Устанавливаем макет ошибки
         viewModel1._authResult.value = AvtorizationVM.Result.Error(mockError.message.toString())
 
-        // Проверяем, что состояние signInState было правильно установлено
         assertEquals(viewModel1._authResult.value, AvtorizationVM.Result.Error(mockError.message.toString()))
     }
 
@@ -79,10 +77,8 @@ class ExampleUnitTest {
         val viewModel1 = AvtorizationVM()
         val mockError = Exception("Failed to sign in")
 
-        // Устанавливаем макет ошибки
         viewModel1._authResult.value = AvtorizationVM.Result.Error(mockError.message.toString())
 
-        // Проверяем, что состояние signInState было правильно установлено
         assertEquals(viewModel1._authResult.value, AvtorizationVM.Result.Error(mockError.message.toString()))
     }
 
